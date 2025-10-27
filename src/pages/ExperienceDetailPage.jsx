@@ -289,7 +289,7 @@ const ExperienceDetailPage = () => {
         {
           title: "Karkidaka Vavu Bali",
           description: "Karkidaka Vavu Bali is a sacred Hindu ritual observed in Kerala during the new moon day of the Malayalam month Karkidakam (July-August). It is performed to honor and remember deceased ancestors, seeking peace and liberation (moksha) for their souls. Devotees gather at riverbanks, temple ponds, and beaches early in the morning to perform the Bali Tharpanam ritual, offering rice balls, sesame seeds, and sacred water. The ritual fosters a deep connection between the living and the departed, reinforcing family bonds and spiritual continuity. It coincides with Kerala's monsoon season, symbolizing renewal and protection. Karkidaka Vavu is a solemn occasion marked by prayers, fasting, and a sense of community devotion. It remains an essential part of Kerala's cultural and religious heritage.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770791/Attukal_Pongala_bws6he.jpg",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1761575575/Karkidaka_Vavu_Bali_1_httuwk.png",
           imageTitle: "Karkidaka Vavu Bali",
           imageDescription: "Ancestral ritual during monsoon season",
           highlights: ["Ancestral honoring", "Riverbank rituals", "Family bonding", "Spiritual continuity", "Monsoon symbolism"],
