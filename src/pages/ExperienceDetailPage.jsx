@@ -38,7 +38,12 @@ const ExperienceDetailPage = () => {
         },
         {
           title: "Pizhichil",
-          description: "Pizhichil is a unique Kerala Ayurvedic therapy where warm, medicated herbal oil is continuously poured over the entire body while gentle massage is given. This treatment deeply relaxes the muscles, nourishes the skin, and helps relieve joint and nerve pain. Pizhichil is especially effective for conditions like arthritis, muscle stiffness, and neurological disorders. It enhances circulation and aids in detoxifying the body through the skin. Often called the 'oil bath,' Pizhichil is a signature rejuvenation treatment in Kerala's traditional healing.",
+          description: `Pizhichil is a unique Kerala Ayurvedic therapy where warm, medicated herbal oil is continuously
+poured over the entire body while gentle massage is given. This treatment deeply relaxes the
+muscles, nourishes the skin, and helps relieve joint and nerve pain. Pizhichil is especially effective for
+conditions like arthritis, muscle stiffness, and neurological disorders. It enhances circulation and aids
+in detoxifying the body through the skin. Often called the “oil bath,” Pizhichil is a signature
+rejuvenation treatment in Kerala’s traditional healing.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770795/pizhichil_rba8ox.png",
           imageTitle: "Pizhichil Treatment",
           imageDescription: "Royal treatment with warm oil bath for complete body rejuvenation",
@@ -48,7 +53,13 @@ const ExperienceDetailPage = () => {
         },
         {
           title: "Udvartana",
-          description: "Udvartana is a traditional Ayurvedic massage where the body is vigorously massaged with herbal powders or pastes, using upward strokes. This therapy is known for detoxifying the skin, stimulating the lymphatic system, and improving circulation. Udvartana is especially recommended for those seeking weight loss, cellulite reduction, skin exfoliation, and enhanced muscle tone. The procedure helps in removing toxins, revitalizing the senses, and promoting a glowing complexion. It is often paired with herbal steam baths for deeper detoxification and rejuvenation.",
+          description: `Udvartana is a traditional Ayurvedic massage where the body is vigorously massaged with herbal
+powders or pastes, using upward strokes. This therapy is known for detoxifying the skin, stimulating
+the lymphatic system, and improving circulation. Udvartana is especially recommended for those
+seeking weight loss, cellulite reduction, skin exfoliation, and enhanced muscle tone. The procedure
+helps in removing toxins, revitalizing the senses, and promoting a glowing complexion. It is often
+paired with herbal steam baths for deeper detoxification and rejuvenation. Authentic images of
+Udvartana therapy can be viewed on Kerala Ayurveda wellness sites and tourism photo galleries.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770797/udvartana_khwlq6.jpg",
           imageTitle: "Udvartana Therapy",
           imageDescription: "Herbal powder massage for detoxification and rejuvenation",
@@ -128,7 +139,7 @@ spiritual significance, honoring ancestral spirits and local deities while prese
 types of Theyyam exist, each featuring unique stories, symbolism, and elaborate headdresses. Most
 Theyyam performers are men, although one rare form is performed by women. This tradition,
 rooted in ancient tribal practices and mythology, remains a powerful and immersive celebration of
-Kerala&#39;s heritage.`,
+Kerala,s heritage.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770809/theyyam_fnnirr.jpg",
           imageTitle: "Theyyam Ritual",
           imageDescription: "Ancient ritual dance form connecting divine and mortal realms",
@@ -344,7 +355,16 @@ ritual. Theyyam showcases Kerala’s rich tribal heritage and spiritual beliefs.
       items: [
         {
           title: "Puttu and Kadala Curry",
-          description: "Puttu and Kadala Curry is a beloved traditional breakfast in Kerala. Puttu is made by steaming layers of coarsely ground rice flour and grated coconut in a cylindrical mold, resulting in soft and aromatic rice cakes. Kadala Curry is a spicy, flavorful curry made with black chickpeas cooked in a rich blend of spices, onions, tomatoes, garlic, and coconut, often tempered with mustard seeds and curry leaves in coconut oil. The combination offers a perfect balance of mildness from puttu and the robust taste of kadala curry. It is nutritious, providing carbohydrates and protein, and is commonly enjoyed with banana or papad on the side. This dish is simple to prepare yet deeply satisfying, embodying Kerala's culinary tradition. It is a go-to meal across households and is cherished for its rich flavors and comforting texture. Puttu and Kadala Curry is a must-try for anyone wanting a true taste of Kerala breakfast culture.",
+          description: `Puttu and Kadala Curry is a beloved traditional breakfast in Kerala. Puttu is made by steaming layers
+of coarsely ground rice flour and grated coconut in a cylindrical mold, resulting in soft and aromatic
+rice cakes. Kadala Curry is a spicy, flavorful curry made with black chickpeas cooked in a rich blend of
+spices, onions, tomatoes, garlic, and coconut, often tempered with mustard seeds and curry leaves
+in coconut oil. The combination offers a perfect balance of mildness from puttu and the robust taste
+of kadala curry. It is nutritious, providing carbohydrates and protein, and is commonly enjoyed with
+banana or papad on the side. This dish is simple to prepare yet deeply satisfying, embodying Kerala&#39;s
+culinary tradition. It is a go-to meal across households and is cherished for its rich flavors and
+comforting texture. Puttu and Kadala Curry is a must-try for anyone wanting a true taste of Kerala
+breakfast culture.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770795/Puttu_and_Kadala_Curry_frdnyy.jpg",
           imageTitle: "Puttu and Kadala Curry",
           imageDescription: "Steamed rice cake with spicy chickpea curry",
@@ -354,7 +374,16 @@ ritual. Theyyam showcases Kerala’s rich tribal heritage and spiritual beliefs.
         },
         {
           title: "Appam with Stew",
-          description: "Appam with Stew is a classic Kerala breakfast loved for its perfect blend of flavors and textures. Appam is a soft, lacy pancake made from fermented rice batter and coconut milk, featuring a fluffy center and crispy edges. The vegetable stew, also called Ishtu, is a mildly spiced curry cooked in a rich coconut milk base with vegetables like potatoes, carrots, and beans. The stew is flavored with fragrant spices such as cinnamon, cloves, cardamom, and curry leaves, tempered in coconut oil for an authentic aroma. This combination offers a balance of creamy and delicate tastes, with the stew complementing the lightness of appam beautifully. It's traditionally enjoyed during festivals and special occasions but is also a popular everyday meal. Appam and Stew provide a wholesome, comforting, and nourishing experience reflecting Kerala's culinary heritage. The dish is often served hot and paired with fried bananas or chutneys for added taste.",
+          description: `Appam with Stew is a classic Kerala breakfast loved for its perfect blend of flavors and textures.
+Appam is a soft, lacy pancake made from fermented rice batter and coconut milk, featuring a fluffy
+center and crispy edges. The vegetable stew, also called Ishtu, is a mildly spiced curry cooked in a
+rich coconut milk base with vegetables like potatoes, carrots, and beans. The stew is flavored with
+fragrant spices such as cinnamon, cloves, cardamom, and curry leaves, tempered in coconut oil for
+an authentic aroma. This combination offers a balance of creamy and delicate tastes, with the stew
+complementing the lightness of appam beautifully. It&#39;s traditionally enjoyed during festivals and
+special occasions but is also a popular everyday meal. Appam and Stew provide a wholesome,
+comforting, and nourishing experience reflecting Kerala’s culinary heritage. The dish is often served
+hot and paired with fried bananas or chutneys for added taste.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770791/Appam_with_Stew_sl4yr6.png",
           imageTitle: "Appam with Stew",
           imageDescription: "Lacy rice pancakes with vegetable stew",
@@ -364,7 +393,14 @@ ritual. Theyyam showcases Kerala’s rich tribal heritage and spiritual beliefs.
         },
         {
           title: "Karimeen Pollichathu",
-          description: "Karimeen Pollichathu is a popular Kerala dish featuring pearl spot fish marinated with a blend of spices. The fish is coated with a masala made from onions, tomatoes, ginger, garlic, and coconut milk, giving it a rich and aromatic flavor. It is then wrapped in banana leaves, which infuse the fish with a unique, smoky aroma during cooking. The wrapped fish is pan-fried or grilled until tender and infused with the spices. Traditionally, coconut oil is used in the cooking process to enhance the authentic taste. This dish is a favorite in Kerala's cuisine, known for its delicate balance of spicy, tangy, and creamy textures. It is often served with rice or as a special delicacy during festive occasions and gatherings.",
+          description: `Karimeen Pollichathu is a popular Kerala dish featuring pearl spot fish marinated with a blend of
+spices. The fish is coated with a masala made from onions, tomatoes, ginger, garlic, and coconut
+milk, giving it a rich and aromatic flavor. It is then wrapped in banana leaves, which infuse the fish
+with a unique, smoky aroma during cooking. The wrapped fish is pan-fried or grilled until tender and
+infused with the spices. Traditionally, coconut oil is used in the cooking process to enhance the
+authentic taste. This dish is a favorite in Kerala’s cuisine, known for its delicate balance of spicy,
+tangy, and creamy textures. It is often served with rice or as a special delicacy during festive
+occasions and gatherings.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1761289736/Karimeen_Pollichathu_1_nvp0ii.jpg",
           imageTitle: "Karimeen Pollichathu",
           imageDescription: "Pearl spot fish grilled in banana leaves",
@@ -374,7 +410,15 @@ ritual. Theyyam showcases Kerala’s rich tribal heritage and spiritual beliefs.
         },
         {
           title: "Malabar Parotta with Beef Curry",
-          description: "Malabar Parotta with Beef Curry is a beloved Kerala dish known for its rich flavors and textures. Malabar Parotta is a flaky, layered flatbread made from refined flour, kneaded to a soft dough, and cooked on a hot griddle until golden and crisp. Its characteristic layers are achieved by rolling, folding, and repeatedly pressing the dough. Beef Curry from Kerala is a spicy, aromatic preparation cooked with a blend of local spices, coconut oil, onions, tomatoes, and sometimes coconut milk, creating a thick, flavorful gravy. The tender beef pieces absorb the robust spices, making it rich and hearty. Together, the soft, flaky Malabar Parotta perfectly complements the spicy, savory beef curry. This combination is a favorite during special occasions and everyday meals alike. It highlights Kerala's love for hearty, spice-infused food and showcases the culinary diversity of the Malabar region.",
+          description: `Malabar Parotta with Beef Curry is a beloved Kerala dish known for its rich flavors and textures.
+Malabar Parotta is a flaky, layered flatbread made from refined flour, kneaded to a soft dough, and
+cooked on a hot griddle until golden and crisp. Its characteristic layers are achieved by rolling,
+folding, and repeatedly pressing the dough. Beef Curry from Kerala is a spicy, aromatic preparation
+cooked with a blend of local spices, coconut oil, onions, tomatoes, and sometimes coconut milk,
+creating a thick, flavorful gravy. The tender beef pieces absorb the robust spices, making it rich and
+hearty. Together, the soft, flaky Malabar Parotta perfectly complements the spicy, savory beef curry.
+This combination is a favorite during special occasions and everyday meals alike. It highlights Kerala’s
+love for hearty, spice-infused food and showcases the culinary diversity of the Malabar region.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770794/malabar-paratha-165616695016x9_lenh3t.jpg",
           imageTitle: "Malabar Parotta",
           imageDescription: "Flaky layered flatbread perfect with curries",
@@ -384,7 +428,14 @@ ritual. Theyyam showcases Kerala’s rich tribal heritage and spiritual beliefs.
         },
         {
           title: "Kerala Prawn Curry",
-          description: "Kerala Prawn Curry is a flavorful, aromatic dish made with fresh prawns cooked in a spiced coconut milk gravy. The prawns are first marinated with turmeric, garlic, and ginger for enhanced taste. The curry base is prepared by sautéing mustard seeds, curry leaves, onions, and spices like red chili powder and coriander. Tamarind or kokum is often added to give the curry a subtle tanginess. Coconut milk is poured in to create a creamy, rich sauce that balances the spices perfectly. The prawns cook quickly in the curry until tender and infused with the flavors. This curry is usually served hot with steamed rice or appam. It is a staple in Kerala cuisine, cherished for its blend of spicy, tangy, and creamy elements.",
+          description: `Kerala Prawn Curry is a flavorful, aromatic dish made with fresh prawns cooked in a spiced coconut
+milk gravy. The prawns are first marinated with turmeric, garlic, and ginger for enhanced taste. The
+curry base is prepared by sautéing mustard seeds, curry leaves, onions, and spices like red chili
+powder and coriander. Tamarind or kokum is often added to give the curry a subtle tanginess.
+Coconut milk is poured in to create a creamy, rich sauce that balances the spices perfectly. The
+prawns cook quickly in the curry until tender and infused with the flavors. This curry is usually served
+hot with steamed rice or appam. It is a staple in Kerala cuisine, cherished for its blend of spicy, tangy,
+and creamy elements.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770793/keralan_prawn_curry_45390_16x9_fzqql5.jpg",
           imageTitle: "Kerala Prawn Curry",
           imageDescription: "Spicy prawn preparation in coconut gravy",
@@ -394,7 +445,16 @@ ritual. Theyyam showcases Kerala’s rich tribal heritage and spiritual beliefs.
         },
         {
           title: "Thalassery Biryani",
-          description: "Thalassery Biryani is a signature rice dish from the Malabar region of Kerala, known for its distinct aroma and delicate flavor. It is made using Jeerakasala or Kaima rice, which has a unique aroma and fluffy texture. The biryani incorporates a mild yet flavorful chicken masala cooked with onions, ginger, garlic, green chilies, tomatoes, and a blend of traditional Malabar spices. The chicken is marinated with yogurt and lime juice to tenderize and enhance the flavors. The rice and chicken masala are layered and cooked together using the dum method, sealing in the flavors. Cashews, raisins, and fried onions are added for extra richness and a subtle sweetness. Thalassery Biryani is typically served with side dishes like cucumber raita and chili pickle. It is a celebratory dish served during festivals, weddings, and special occasions, highly cherished for its balanced taste and fragrant spices.",
+          description: `Thalassery Biryani is a signature rice dish from the Malabar region of Kerala, known for its distinct
+aroma and delicate flavor. It is made using Jeerakasala or Kaima rice, which has a unique aroma and
+fluffy texture. The biryani incorporates a mild yet flavorful chicken masala cooked with onions,
+ginger, garlic, green chilies, tomatoes, and a blend of traditional Malabar spices. The chicken is
+marinated with yogurt and lime juice to tenderize and enhance the flavors. The rice and chicken
+masala are layered and cooked together using the dum method, sealing in the flavors. Cashews,
+raisins, and fried onions are added for extra richness and a subtle sweetness. Thalassery Biryani is
+typically served with side dishes like cucumber raita and chili pickle. It is a celebratory dish served
+during festivals, weddings, and special occasions, highly cherished for its balanced taste and fragrant
+spices.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770796/Thalassery_Biryani_m0jz6r.jpg",
           imageTitle: "Thalassery Biryani",
           imageDescription: "Aromatic rice dish with Malabar spices and meat",
@@ -404,7 +464,14 @@ ritual. Theyyam showcases Kerala’s rich tribal heritage and spiritual beliefs.
         },
         {
           title: "Erissery",
-          description: "Erissery is a traditional Kerala dish made with yellow pumpkin, black-eyed peas, coconut, and spices. The pumpkin is peeled, cubed, and cooked with soaked cowpeas until both are soft. A ground coconut mixture with cumin, green chilies, and turmeric is prepared and added to the cooked pumpkin and beans. The dish is seasoned with a tempering of mustard seeds, red chilies, curry leaves, and coconut oil, which is then poured over the curry. It's a mildly spiced, slightly sweet, and aromatic curry, often served as part of a festive meal or on special occasions. Erissery is known for its wholesome taste and balanced flavors, perfect with rice. It is a popular dish during Onam and other traditional Kerala feasts.",
+          description: `Erissery is a traditional Kerala dish made with yellow pumpkin, black-eyed peas, coconut, and spices.
+The pumpkin is peeled, cubed, and cooked with soaked cowpeas until both are soft. A ground
+coconut mixture with cumin, green chilies, and turmeric is prepared and added to the cooked
+pumpkin and beans. The dish is seasoned with a tempering of mustard seeds, red chilies, curry
+leaves, and coconut oil, which is then poured over the curry. It’s a mildly spiced, slightly sweet, and
+aromatic curry, often served as part of a festive meal or on special occasions. Erissery is known for
+its wholesome taste and balanced flavors, perfect with rice. It is a popular dish during Onam and
+other traditional Kerala feasts.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770792/Erissery_djbvcj.jpg",
           imageTitle: "Erissery",
           imageDescription: "Pumpkin and bean curry with coconut",
@@ -414,7 +481,15 @@ ritual. Theyyam showcases Kerala’s rich tribal heritage and spiritual beliefs.
         },
         {
           title: "Idli Sambar",
-          description: "Idli Sambar is a popular South Indian breakfast combination, especially favored in Kerala. Idli are soft, steamed rice cakes made from fermented rice and urad dal batter. Sambar is a lentil-based vegetable stew flavored with tamarind, mustard seeds, curry leaves, and a special blend of spices called sambar powder. Vegetables like drumsticks, carrots, beans, and tomatoes are commonly used in the sambar. The dal (lentils) is cooked until soft and mixed with tamarind water and the sautéed spices. The sambar is tempered with mustard seeds, dry red chilies, and asafoetida in coconut oil for aroma. Idli and sambar together provide a nutritious, balanced meal with carbohydrates, protein, and fiber. This dish is comforting, light, and widely enjoyed during breakfast or snacks.",
+          description: `Idli Sambar is a popular South Indian breakfast combination, especially favored in Kerala. Idli are
+soft, steamed rice cakes made from fermented rice and urad dal batter. Sambar is a lentil-based
+vegetable stew flavored with tamarind, mustard seeds, curry leaves, and a special blend of spices
+called sambar powder. Vegetables like drumsticks, carrots, beans, and tomatoes are commonly used
+in the sambar. The dal (lentils) is cooked until soft and mixed with tamarind water and the sautéed
+spices. The sambar is tempered with mustard seeds, dry red chilies, and asafoetida in coconut oil for
+
+aroma. Idli and sambar together provide a nutritious, balanced meal with carbohydrates, protein,
+and fiber. This dish is comforting, light, and widely enjoyed during breakfast or snacks.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770792/idli_nm5o8h.jpg",
           imageTitle: "Idli Sambar",
           imageDescription: "Soft steamed rice cakes with lentil stew",
@@ -424,7 +499,12 @@ ritual. Theyyam showcases Kerala’s rich tribal heritage and spiritual beliefs.
         },
         {
           title: "Ada Pradhaman",
-          description: "Ada Pradhaman is a rich and creamy Kerala dessert made from rice ada (rice flakes), jaggery, and coconut milk. The rice ada is soaked, then sautéed in ghee with cashews, raisins, and coconut pieces. Jaggery syrup is added to the cooked ada and simmered until thickened. Coconut milk—both thick and thin—is poured in during cooking to give a silky texture. Flavored with cardamom and garnished with fried nuts, it is a popular festive dish, especially during Onam. The result is a luscious, mildly sweet payasam with fragrant spices and crunchy toppings.",
+          description: `Ada Pradhaman is a rich and creamy Kerala dessert made from rice ada (rice flakes), jaggery, and
+coconut milk. The rice ada is soaked, then sautéed in ghee with cashews, raisins, and coconut pieces.
+Jaggery syrup is added to the cooked ada and simmered until thickened. Coconut milk—both thick
+and thin—is poured in during cooking to give a silky texture. Flavored with cardamom and garnished
+with fried nuts, it is a popular festive dish, especially during Onam. The result is a luscious, mildly
+sweet payasam with fragrant spices and crunchy toppings.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770794/pepper-delight-ada-pradhaman-2_wkym90.jpg",
           imageTitle: "Ada Pradhaman",
           imageDescription: "Sweet payasam with rice flakes and jaggery",
@@ -434,7 +514,15 @@ ritual. Theyyam showcases Kerala’s rich tribal heritage and spiritual beliefs.
         },
         {
           title: "Kappa and Meen Curry",
-          description: "Kappa and Meen Curry is a classic Kerala combination of boiled tapioca (kappa) and spicy fish curry (meen curry). Tapioca is peeled, cut, and boiled until soft, then mashed and mixed with grated coconut, turmeric, cumin, and curry leaves for added flavor. The fish curry is made with fresh fish cooked in a tangy and spicy gravy using tamarind, chili powder, mustard seeds, fenugreek, curry leaves, and sometimes coconut milk. The curry is rich, aromatic, and full of traditional Kerala spices. This pair is widely loved for its balance of starchy, creamy tapioca and fiery, tangy fish curry. It is a staple comfort food in Kerala and enjoyed with great enthusiasm during meals. The dish reflects Kerala's coastal culinary heritage and the use of locally sourced ingredients.",
+          description: `Kappa and Meen Curry is a classic Kerala combination of boiled tapioca (kappa) and spicy fish curry
+(meen curry). Tapioca is peeled, cut, and boiled until soft, then mashed and mixed with grated
+coconut, turmeric, cumin, and curry leaves for added flavor. The fish curry is made with fresh fish
+cooked in a tangy and spicy gravy using tamarind, chili powder, mustard seeds, fenugreek, curry
+leaves, and sometimes coconut milk. The curry is rich, aromatic, and full of traditional Kerala spices.
+This pair is widely loved for its balance of starchy, creamy tapioca and fiery, tangy fish curry. It is a
+staple comfort food in Kerala and enjoyed with great enthusiasm during meals. The dish reflects
+Kerala’s coastal culinary heritage and the use of locally sourced ingredients. It is best served hot,
+often at home-style meals and festive occasions.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770793/Kappa_and_Meen_Curry_pzbfnx.png",
           imageTitle: "Kappa and Meen Curry",
           imageDescription: "Tapioca with spicy fish curry - Kerala staple",
