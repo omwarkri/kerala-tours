@@ -19,7 +19,7 @@ const ExperienceDetailPage = () => {
         {
           title: "Abhyanga",
           description: "Abhyanga is a traditional Ayurvedic full-body massage using warm, herbal oils applied with gentle, rhythmic strokes. It deeply nourishes the skin, improves blood circulation, and induces a sense of relaxation by calming the nervous system. This massage supports detoxification through lymphatic drainage and helps to balance the body's doshas (bio-energies). Abhyanga is often recommended for stress relief, muscle relaxation, and maintaining overall health and wellness. It is considered a core part of Ayurveda's holistic healing practices.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770797/udvartana_khwlq6.jpg",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1761563459/abhyanga-treatment_zdjqbr.jpg",
           imageTitle: "Abhyanga Massage",
           imageDescription: "Traditional full-body oil massage for detoxification and rejuvenation",
           benefits: ["Stress relief and muscle relaxation", "Improved blood circulation", "Lymphatic drainage and detoxification", "Dosha balancing and rejuvenation", "Overall health and wellness maintenance"],
@@ -59,7 +59,7 @@ const ExperienceDetailPage = () => {
         {
           title: "Kizhi",
           description: "Kizhi is a traditional Ayurvedic massage therapy from Kerala that involves the use of warm herbal poultices or bundles. These bundles, filled with medicinal herbs, are heated and gently pressed or massaged over the body to relieve pain, inflammation, and muscle stiffness. There are different types of Kizhi, such as Elakizhi (herbal leaves) and Njavarakizhi (medicated rice), each providing unique therapeutic benefits. This treatment helps improve circulation, detoxify tissues, and relax the muscles deeply. Kizhi is widely used for rejuvenation and managing chronic conditions like arthritis and muscular disorders.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770797/udvartana_khwlq6.jpg",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1761563440/Kizhi_ha8mf3.jpg",
           imageTitle: "Kizhi Treatment",
           imageDescription: "Warm herbal poultice massage for pain relief and muscle relaxation",
           benefits: ["Pain and inflammation relief", "Improved circulation", "Muscle relaxation", "Tissue detoxification", "Chronic condition management"],
@@ -69,7 +69,7 @@ const ExperienceDetailPage = () => {
         {
           title: "Nasya",
           description: "Nasya is an ancient Ayurvedic therapy that involves administering medicinal oils or herbal extracts through the nostrils. It targets the head, sinuses, and respiratory system by cleansing, purifying, and nourishing these areas. Nasya is effective in relieving sinus congestion, headaches, migraines, and neurological issues. It also promotes mental clarity, reduces stress and anxiety, and supports healthy hair growth by improving scalp circulation. This therapy helps balance the doshas, especially Kapha and Vata, contributing to overall wellness and mental calmness.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770795/shirodhara_t8shj8.jpg",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1761563932/nasya-a_ynunkt.png",
           imageTitle: "Nasya Therapy",
           imageDescription: "Nasal administration of herbal medicines for sinus and respiratory health",
           benefits: ["Sinus and respiratory health", "Headache and migraine relief", "Mental clarity", "Scalp and hair health", "Stress and anxiety reduction"],
@@ -79,7 +79,7 @@ const ExperienceDetailPage = () => {
         {
           title: "Kati Basti",
           description: "Kati Basti is a specialized Ayurvedic therapy focused on treating the lower back region. It involves creating a dough ring on the lower back, which is filled with warm, medicated herbal oil. The oil is retained within this ring for 30 to 40 minutes, allowing deep penetration to soothe muscles, reduce pain, and relieve stiffness. This therapy is highly effective in treating chronic lower back pain, muscle spasms, sciatica, and degenerative spinal conditions. Kati Basti also improves blood circulation, nourishes the spinal tissues, and enhances flexibility and overall well-being of the back area.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770795/pizhichil_rba8ox.png",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1761563406/-Kati-Basti-_ldqcfz.jpg",
           imageTitle: "Kati Basti Therapy",
           imageDescription: "Specialized lower back treatment with warm medicated oil",
           benefits: ["Lower back pain relief", "Spinal health improvement", "Muscle relaxation", "Enhanced flexibility", "Circulation improvement"],
@@ -89,7 +89,7 @@ const ExperienceDetailPage = () => {
         {
           title: "Marma Massage",
           description: "Marma Massage is an ancient Ayurvedic therapy that focuses on stimulating specific vital energy points in the body called Marma points. These 107 points are junctions where muscles, nerves, bones, and vessels converge and are considered crucial for the flow of life energy or prana. By gently massaging these points, Marma Massage helps to unblock energy pathways, promote healing, reduce pain, and restore physical and mental balance. It can relieve stress, improve circulation, enhance immune function, and support emotional release. Marma Massage combines deep anatomical knowledge with subtle energy work and is rooted in Kerala's traditional healing practices linked to the ancient martial art of Kalaripayattu.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770797/udvartana_khwlq6.jpg",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1761563423/marma_vffvp6.jpg",
           imageTitle: "Marma Massage",
           imageDescription: "Energy point stimulation for holistic healing and balance",
           benefits: ["Energy pathway unblocking", "Stress relief and pain reduction", "Improved circulation", "Enhanced immune function", "Emotional balance"],
@@ -109,7 +109,7 @@ const ExperienceDetailPage = () => {
         {
           title: "Kathakali",
           description: "Kathakali is a classical dance-drama from Kerala, known for its vibrant costumes, elaborate face makeup, and expressive hand gestures. It combines dance, music, and acting to tell stories from Indian epics like the Ramayana and Mahabharata. Performers use intricate facial expressions and body movements to convey emotions and narratives without speaking. The dance is traditionally performed by men, even for female roles, with each character's costume and makeup symbolizing their nature, such as heroes or demons. Kathakali's music features traditional Kerala percussion instruments like the chenda and maddalam. It originated in the 17th century and is deeply rooted in Kerala's temple and royal court traditions. Today, it is a celebrated art form and cultural symbol of Kerala, performed at festivals and special events.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770809/theyyam_fnnirr.jpg",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770792/Kathakali_-_tpwnmq.jpg",
           imageTitle: "Kathakali Performance",
           imageDescription: "Classical dance-drama with elaborate makeup and costumes",
           features: ["Vibrant costumes and makeup", "Expressive hand gestures", "Traditional percussion music", "Epic mythological stories", "Male performers for all roles"],
@@ -129,7 +129,7 @@ const ExperienceDetailPage = () => {
         {
           title: "Mohiniyattam",
           description: "Mohiniyattam is a classical dance form from Kerala, known as the 'dance of the enchantress.' It features graceful, swaying movements and subtle facial expressions, emphasizing feminine beauty and lasya style. Traditionally performed by women, it tells stories of love and devotion, often inspired by Hindu mythology. The dancer wears a white costume with golden borders, symbolizing simplicity and elegance. Its music is based on Carnatic and Kerala's indigenous Sopanam styles, enhancing the delicate movements. Mohiniyattam is celebrated for its slow, rhythmic pace, fluidity, and emotive gestures. It is a significant cultural treasure of Kerala, performed in temples and cultural festivals.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770798/Thiruvathirakkali_u12e97.jpg",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770794/Mohiniyattam_sku3q6.jpg",
           imageTitle: "Mohiniyattam Dance",
           imageDescription: "Graceful dance form known as the dance of the enchantress",
           features: ["Graceful movements", "Feminine expression", "White and gold costumes", "Sopanam music style", "Love and devotion themes"],
@@ -139,7 +139,7 @@ const ExperienceDetailPage = () => {
         {
           title: "Kalaripayattu",
           description: "Kalaripayattu is one of the oldest martial arts in the world, originating in Kerala over 3,000 years ago. It is a scientifically structured discipline that includes strikes, kicks, grappling, weaponry, and healing techniques. The word 'Kalari' means training space, and 'Payattu' means fight or practice. According to legend, Sage Parashurama, the creator of Kerala, established Kalaripayattu to help locals defend themselves. The martial art is known for graceful, animal-inspired movements and the use of weapons like swords, spears, and the flexible Urumi. Traditionally, it was practiced in special training halls called Kalaris and was an important part of Kerala's warrior culture. Today, Kalaripayattu is revived globally as both a fighting art and a healing discipline.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770795/Pulikali_pzfhy3.jpg",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770793/Kalaripayattu_kymjit.png",
           imageTitle: "Kalaripayattu Martial Art",
           imageDescription: "Ancient martial art with weapon training and healing techniques",
           features: ["Ancient martial techniques", "Weapon training", "Healing methods", "Animal-inspired movements", "3,000-year heritage"],
@@ -169,7 +169,7 @@ const ExperienceDetailPage = () => {
         {
           title: "Padayani",
           description: "Padayani is a traditional ritualistic folk dance form performed in temples of central Kerala, dedicated to Goddess Bhadrakali. It is a vibrant combination of music, dance, theatre, satire, elaborate masks, and paintings. The name Padayani means 'row of warriors,' and the dance is believed to have roots in ancient martial arts, symbolizing a warrior's formation. The performances are held during festival seasons, usually from mid-December to mid-May, and involve dramatic enactments to appease the goddess and ensure good harvests. Dancers wear large, colorful masks made from natural materials like areca palm leaves. Padayani rituals include rhythmic percussion, expressive dances, and social satire, reflecting the deep cultural and spiritual heritage of Kerala. It is regarded as a symbolic act of purification and community devotion.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770793/Koodiyattam-featured-image_bnxlci.png",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770794/padayani-dance3_re5gwp.jpg",
           imageTitle: "Padayani Dance",
           imageDescription: "Ritual folk dance with elaborate masks and vibrant performances",
           features: ["Elaborate masks", "Ritualistic performance", "Warrior symbolism", "Social satire", "Community devotion"],
@@ -247,6 +247,16 @@ const ExperienceDetailPage = () => {
           time: "April"
         },
         {
+          title: "Theyyam Festival",
+          description: "Theyyam Festival is a spectacular ritualistic celebration held in various temples across North Kerala, particularly in Kannur and Kasargod districts. This vibrant festival features the ancient ritual dance form of Theyyam, where performers transform into deities through elaborate makeup, costumes, and spiritual rituals. The festival typically runs from December to April, with each temple hosting specific Theyyam performances on designated days. Devotees and tourists flock to witness these divine performances, believed to bring blessings and prosperity. The festival showcases over 400 different types of Theyyam, each with unique costumes, music, and mythological stories. It's a profound cultural experience that blends art, spirituality, and tradition, offering a glimpse into Kerala's ancient tribal heritage and religious practices.",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770799/Theyyam_txgzaj.png",
+          imageTitle: "Theyyam Festival",
+          imageDescription: "Divine ritual performances during Theyyam season",
+          highlights: ["Ancient ritual performances", "Divine transformations", "Elaborate costumes and makeup", "Over 400 Theyyam varieties", "Spiritual blessings"],
+          duration: "December to April",
+          time: "December-April"
+        },
+        {
           title: "Attukal Pongala",
           description: "Attukal Pongala is an annual 10-day festival celebrated at the Attukal Bhagavathi Temple in Thiruvananthapuram, Kerala. It is famous for being the largest gathering of women for a religious purpose in the world. On the ninth day, millions of women from diverse communities cook a special sweet dish called Pongala in earthen pots as an offering to the goddess Attukalamma. The festival symbolizes feminine power, devotion, and unity, with women coming together irrespective of caste or creed. The ritual is deeply spiritual and culturally significant, involving prayers, music, and community harmony. Attukal Pongala has earned a place in the Guinness World Records for its massive participation. It showcases Kerala's rich heritage and highlights women's empowerment and faith.",
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770791/Attukal_Pongala_bws6he.jpg",
@@ -269,7 +279,7 @@ const ExperienceDetailPage = () => {
         {
           title: "Arattu Festival",
           description: "Arattu Festival is a significant religious festival celebrated in Kerala, especially at the Sree Padmanabhaswamy Temple in Thiruvananthapuram and Janardhan Swami Temple in Varkala. The word 'Arattu' means a holy bath, marking the ceremonial bathing of the deity's idol in a sacred water body like a river or sea. The festival usually lasts for ten days and is held twice a year, during March-April and October-November. It features grand processions with decorated elephants, traditional music, cultural performances like Kathakali dance, and vibrant rituals. The event begins with flag hoisting and concludes with the sacred bath of the deity on the last day. The procession is led by royal family members or temple dignitaries, adding to the festival's grandeur. Arattu celebrates Kerala's deep spiritual heritage and community devotion.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770796/Thrissur_Pooram_e8qjxs.jpg",
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770791/arattu_p3rb8i.png",
           imageTitle: "Arattu Festival",
           imageDescription: "Holy bath festival with grand processions",
           highlights: ["Holy bath ritual", "Decorated elephants", "Cultural performances", "Royal processions", "Twice yearly celebration"],
