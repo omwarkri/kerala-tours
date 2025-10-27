@@ -118,8 +118,18 @@ const ExperienceDetailPage = () => {
         },
         {
           title: "Theyyam",
-          description: "Theyyam is a traditional ritual dance form of Kerala, especially popular in the North Malabar region. It is considered a dance of the gods, combining dance, music, and mime to honor heroes and ancestral spirits. Performers undergo elaborate makeup and wear vibrant costumes and towering headgear to represent deities. The dance takes place in temples or sacred groves, often between December and April. Each Theyyam has a unique style and story, with over 400 different forms. It is both a religious and cultural event, where the performer is believed to embody the divine during the ritual. Theyyam showcases Kerala's rich tribal heritage and spiritual beliefs.",
-          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770799/Theyyam_txgzaj.png",
+          description: `Theyyam is a vibrant ritual art form from North Kerala, blending dance, music, and mysticism.
+Performers in striking costumes and elaborate makeup represent gods, goddesses, and legendary
+heroes, becoming living embodiments of the divine during the ritual. The performance,
+accompanied by rhythmic drumming and invocation songs, often takes place in village shrines and
+sacred groves. Theyyam is believed to bridge the human and spiritual worlds, with performers
+entering trance-like states to deliver blessings and prophecies. The ritual has deep social and
+spiritual significance, honoring ancestral spirits and local deities while preserving folklore. Over 400
+types of Theyyam exist, each featuring unique stories, symbolism, and elaborate headdresses. Most
+Theyyam performers are men, although one rare form is performed by women. This tradition,
+rooted in ancient tribal practices and mythology, remains a powerful and immersive celebration of
+Kerala&#39;s heritage.`,
+          image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770809/theyyam_fnnirr.jpg",
           imageTitle: "Theyyam Ritual",
           imageDescription: "Ancient ritual dance form connecting divine and mortal realms",
           features: ["Divine embodiment", "Elaborate costumes and makeup", "Ritualistic performance", "Tribal heritage", "Over 400 unique forms"],
@@ -248,7 +258,13 @@ const ExperienceDetailPage = () => {
         },
         {
           title: "Theyyam Festival",
-          description: "Theyyam Festival is a spectacular ritualistic celebration held in various temples across North Kerala, particularly in Kannur and Kasargod districts. This vibrant festival features the ancient ritual dance form of Theyyam, where performers transform into deities through elaborate makeup, costumes, and spiritual rituals. The festival typically runs from December to April, with each temple hosting specific Theyyam performances on designated days. Devotees and tourists flock to witness these divine performances, believed to bring blessings and prosperity. The festival showcases over 400 different types of Theyyam, each with unique costumes, music, and mythological stories. It's a profound cultural experience that blends art, spirituality, and tradition, offering a glimpse into Kerala's ancient tribal heritage and religious practices.",
+          description: `Theyyam is a traditional ritual dance form of Kerala, especially popular in the North Malabar region.
+It is considered a dance of the gods, combining dance, music, and mime to honor heroes and
+ancestral spirits. Performers undergo elaborate makeup and wear vibrant costumes and towering
+headgear to represent deities. The dance takes place in temples or sacred groves, often between
+December and April. Each Theyyam has a unique style and story, with over 400 different forms. It is
+both a religious and cultural event, where the performer is believed to embody the divine during the
+ritual. Theyyam showcases Kerala’s rich tribal heritage and spiritual beliefs.`,
           image: "https://res.cloudinary.com/dl2gcscfa/image/upload/v1759770799/Theyyam_txgzaj.png",
           imageTitle: "Theyyam Festival",
           imageDescription: "Divine ritual performances during Theyyam season",
