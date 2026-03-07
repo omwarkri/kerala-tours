@@ -1,0 +1,28 @@
+# AWS Credentials Configuration Example
+
+# File: ~/.aws/credentials (Note: Don't commit this!)
+
+[default]
+aws_access_key_id = YOUR_ACCESS_KEY
+aws_secret_access_key = YOUR_SECRET_KEY
+
+[kerala-toors]
+aws_access_key_id = YOUR_ACCESS_KEY
+aws_secret_access_key = YOUR_SECRET_KEY
+
+
+# File: ~/.aws/config
+
+[default]
+region = ap-south-1
+output = json
+
+[profile kerala-toors]
+region = ap-south-1
+output = json
+
+
+# Usage:
+# export AWS_PROFILE=kerala-toors
+# OR
+# aws s3 ls --profile kerala-toors

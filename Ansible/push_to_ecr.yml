@@ -1,0 +1,59 @@
+---
+# Ansible playbook to configure ECR and push Docker image
+
+- name: Push Docker image to AWS ECR
+  hosts: localhost
+  gather_facts: no
+  vars:
+    aws_region: "ap-south-1"
+    ecr_repository_name: "kerala-toors"
+    docker_image: "omwarkri123/react-app:latest"
+    ecr_image_tag: "latest"
+
+  tasks:
+    - name: Create ECR repository
+      amazon.aws.ecr:
+        name: "{{ ecr_repository_name }}"
+        region: "{{ aws_region }}"
+        state: present
+      register: ecr_repo
+
+    - name: Display ECR repository URI
+      debug:
+        msg: "ECR Repository URI: {{ ecr_repo.repository.repository_uri }}"
+
+    - name: Get ECR login token
+      shell: |
+        aws ecr get-login-password --region {{ aws_region }} | \
+        docker login --username AWS --password-stdin {{ ecr_repo.repository.registry_id }}.dkr.ecr.{{ aws_region }}.amazonaws.com
+      environment:
+        AWS_DEFAULT_REGION: "{{ aws_region }}"
+
+    - name: Tag Docker image for ECR
+      shell: |
+        docker tag {{ docker_image }} {{ ecr_repo.repository.repository_uri }}:{{ ecr_image_tag }}
+
+    - name: Push Docker image to ECR
+      shell: |
+        docker push {{ ecr_repo.repository.repository_uri }}:{{ ecr_image_tag }}
+
+    - name: Set ECR image lifecycle policy
+      amazon.aws.ecr_lifecycle_policy:
+        repository_name: "{{ ecr_repository_name }}"
+        region: "{{ aws_region }}"
+        lifecycle_policy:
+          rules:
+            - rulePriority: 1
+              description: "Keep last 10 images"
+              selection:
+                tagStatus: any
+                countType: imageCountMoreThan
+                countNumber: 10
+              action:
+                type: expire
+
+    - name: Success message
+      debug:
+        msg: |
+          ✓ Docker image pushed to ECR successfully!
+          Repository URI: {{ ecr_repo.repository.repository_uri }}:{{ ecr_image_tag }}
