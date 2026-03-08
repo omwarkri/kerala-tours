@@ -18,19 +18,12 @@ pipeline {
         }
 
         stage('Clone Repository') {
-            steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    extensions: [
-                        [$class: 'CloneOption', depth: 1, shallow: true, noTags: false]
-                    ],
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/omwarkri/travels-Toors.git'
-                    ]]
-                ])
-            }
-        }
+    steps {
+        sh '''
+        git clone --depth 1 https://github.com/omwarkri/travels-Toors.git
+        '''
+    }
+}
 
         stage('Build Docker Image') {
             steps {
