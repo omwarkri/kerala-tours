@@ -2,9 +2,12 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "react-app:v1"
-        CONTAINER_NAME = "react-container"
-        DOCKER_REPO = "omwarkri/react-app"   // change if needed
+        AWS_REGION = "ap-south-1"
+        AWS_ACCOUNT_ID = "782696281574
+"
+        ECR_REPO = "react-app"
+        IMAGE_TAG = "latest"
+        IMAGE_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}"
     }
 
     stages {
@@ -12,61 +15,79 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/omwarkri/travels-Toors.git'
+                url: 'https://github.com/omwarkri/travels-Toors.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${IMAGE_NAME} ."
+                sh "docker build -t ${ECR_REPO}:${IMAGE_TAG} ."
             }
         }
 
-        stage('Docker Login') {
+        stage('AWS ECR Login') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'docker-hub-cred',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )]) {
-                    sh """
-                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                    """
+                sh """
+                aws ecr get-login-password --region ${AWS_REGION} \
+                | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+                """
+            }
+        }
+
+        stage('Tag Docker Image') {
+            steps {
+                sh "docker tag ${ECR_REPO}:${IMAGE_TAG} ${IMAGE_URI}"
+            }
+        }
+
+        stage('Push Image to ECR') {
+            steps {
+                sh "docker push ${IMAGE_URI}"
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                dir('terraform') {
+                    sh "terraform init"
                 }
             }
         }
 
-        stage('Tag Image') {
+        stage('Terraform Plan') {
             steps {
-                sh "docker tag ${IMAGE_NAME} ${DOCKER_REPO}:latest"
+                dir('terraform') {
+                    sh "terraform plan"
+                }
             }
         }
 
-        stage('Push to DockerHub') {
+        stage('Terraform Apply') {
             steps {
-                sh "docker push ${DOCKER_REPO}:latest"
+                dir('terraform') {
+                    sh "terraform apply -auto-approve"
+                }
             }
         }
 
-        stage('Stop Old Container') {
+        stage('Deploy to ECS') {
             steps {
-                sh "docker rm -f ${CONTAINER_NAME} || true"
-            }
-        }
-
-        stage('Run New Container') {
-            steps {
-                sh "docker run -d -p 3000:80 --name ${CONTAINER_NAME} ${DOCKER_REPO}:latest"
+                sh "echo Deployment handled by Terraform ECS configuration"
             }
         }
     }
 
     post {
         success {
-            echo "Deployment Successful 🚀"
+            echo "CI/CD Pipeline Completed Successfully 🚀"
         }
+
         failure {
-            echo "Deployment Failed ❌"
+            echo "Pipeline Failed ❌"
+        }
+
+        always {
+            cleanWs()
         }
     }
 }
