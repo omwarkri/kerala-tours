@@ -3,14 +3,19 @@ pipeline {
 
     environment {
         AWS_REGION = "ap-south-1"
-        AWS_ACCOUNT_ID = "782696281574
-"
+        AWS_ACCOUNT_ID = "782696281574"
         ECR_REPO = "react-app"
         IMAGE_TAG = "latest"
         IMAGE_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}"
     }
 
     stages {
+
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
 
         stage('Clone Repository') {
             steps {
@@ -21,7 +26,9 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${ECR_REPO}:${IMAGE_TAG} ."
+                sh """
+                docker build -t ${ECR_REPO}:${IMAGE_TAG} .
+                """
             }
         }
 
@@ -36,13 +43,17 @@ pipeline {
 
         stage('Tag Docker Image') {
             steps {
-                sh "docker tag ${ECR_REPO}:${IMAGE_TAG} ${IMAGE_URI}"
+                sh """
+                docker tag ${ECR_REPO}:${IMAGE_TAG} ${IMAGE_URI}
+                """
             }
         }
 
         stage('Push Image to ECR') {
             steps {
-                sh "docker push ${IMAGE_URI}"
+                sh """
+                docker push ${IMAGE_URI}
+                """
             }
         }
 
@@ -72,18 +83,19 @@ pipeline {
 
         stage('Deploy to ECS') {
             steps {
-                sh "echo Deployment handled by Terraform ECS configuration"
+                echo "Application deployed to ECS using Terraform 🚀"
             }
         }
     }
 
     post {
+
         success {
-            echo "CI/CD Pipeline Completed Successfully 🚀"
+            echo "✅ CI/CD Pipeline Completed Successfully"
         }
 
         failure {
-            echo "Pipeline Failed ❌"
+            echo "❌ Pipeline Failed"
         }
 
         always {
