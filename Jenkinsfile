@@ -19,8 +19,16 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
-                git branch: 'main',
-                url: 'https://github.com/omwarkri/travels-Toors.git'
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    extensions: [
+                        [$class: 'CloneOption', depth: 1, shallow: true, noTags: false]
+                    ],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/omwarkri/travels-Toors.git'
+                    ]]
+                ])
             }
         }
 
@@ -89,7 +97,6 @@ pipeline {
     }
 
     post {
-
         success {
             echo "✅ CI/CD Pipeline Completed Successfully"
         }
