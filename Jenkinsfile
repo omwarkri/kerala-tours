@@ -20,7 +20,7 @@ pipeline {
         stage('Clone Repository') {
     steps {
         sh '''
-        git clone --depth 1 https://github.com/omwarkri/travels-Toors.git
+        git clone --depth 1 https://github.com/omwarkri/kerala-tours.git
         '''
     }
 }
