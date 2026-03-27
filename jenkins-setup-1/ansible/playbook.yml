@@ -1,0 +1,55 @@
+---
+- hosts: jenkins
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Java
+      apt:
+        name: openjdk-11-jdk
+        state: present
+
+    - name: Add Jenkins repository key
+      apt_key:
+        url: https://pkg.jenkins.io/debian/jenkins.io.key
+        state: present
+
+    - name: Add Jenkins repository
+      apt_repository:
+        repo: deb http://pkg.jenkins.io/debian-stable binary/
+        state: present
+
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+
+    - name: Start Jenkins service
+      service:
+        name: jenkins
+        state: started
+        enabled: yes
+
+    - name: Wait for Jenkins to be available
+      uri:
+        url: http://localhost:8080/login
+        return_content: yes
+        status_code: 200
+      register: jenkins_status
+      until: jenkins_status.status == 200
+      retries: 5
+      delay: 10
+
+    - name: Copy Jenkins configuration
+      template:
+        src: jenkins_config.j2
+        dest: /var/lib/jenkins/config.xml
+      notify: Restart Jenkins
+
+  handlers:
+    - name: Restart Jenkins
+      service:
+        name: jenkins
+        state: restarted

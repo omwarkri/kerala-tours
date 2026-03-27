@@ -1,0 +1,8 @@
+---
+# This file defines handlers that can be triggered by tasks, such as restarting Jenkins after installation.
+
+- name: Restart Jenkins
+  service:
+    name: jenkins
+    state: restarted
+    enabled: yes

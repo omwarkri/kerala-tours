@@ -1,0 +1,11 @@
+- name: Restart Jenkins
+  service:
+    name: jenkins
+    state: restarted
+  when: jenkins_config_changed
+
+- name: Reload Jenkins
+  service:
+    name: jenkins
+    state: reloaded
+  when: jenkins_config_changed

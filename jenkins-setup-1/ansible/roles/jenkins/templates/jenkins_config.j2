@@ -1,0 +1,45 @@
+# Jenkins configuration template for Ansible
+# This file is used to dynamically generate the Jenkins configuration based on provided variables.
+
+# Jenkins configuration
+jenkins:
+  systemMessage: "{{ jenkins_system_message }}"
+  numExecutors: {{ jenkins_num_executors }}
+  mode: "{{ jenkins_mode }}"
+  useSecurity: {{ jenkins_use_security }}
+  securityRealm:
+    local:
+      allowsSignup: false
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: true
+
+# Jenkins plugins
+plugins:
+  - name: "git"
+    version: "latest"
+  - name: "workflow-aggregator"
+    version: "latest"
+  - name: "blueocean"
+    version: "latest"
+
+# Job configuration
+jobs:
+  - name: "{{ job_name }}"
+    description: "{{ job_description }}"
+    scm:
+      git:
+        url: "{{ git_repo_url }}"
+        branch: "{{ git_branch }}"
+    triggers:
+      - pollSCM: "H/5 * * * *"
+    builders:
+      - shell: |
+          echo "Building the project..."
+          # Add build commands here
+    publishers:
+      - archiveArtifacts:
+          artifacts: "**/target/*.jar"
+          fingerprint: true
+
+# End of Jenkins configuration template
