@@ -25,7 +25,7 @@ output "cloudwatch_log_group_name" {
 
 output "route53_zone_id" {
   description = "Route53 Hosted Zone ID"
-  value       = aws_route53_zone.main.zone_id
+  value       = var.create_route53_records ? aws_route53_zone.main[0].zone_id : null
 }
 
 output "domain_name" {
@@ -51,4 +51,19 @@ output "vpc_id" {
 output "application_url" {
   description = "Application URL"
   value       = "http://${aws_lb.main.dns_name}"
+}
+
+output "ecr_repository_url" {
+  description = "ECR repository URL"
+  value       = var.create_ecr_repository ? aws_ecr_repository.app[0].repository_url : null
+}
+
+output "jenkins_public_ip" {
+  description = "Jenkins EC2 public IP"
+  value       = var.create_jenkins_server ? aws_instance.jenkins[0].public_ip : null
+}
+
+output "jenkins_url" {
+  description = "Jenkins URL"
+  value       = var.create_jenkins_server ? "http://${aws_instance.jenkins[0].public_ip}:8080" : null
 }

@@ -1,0 +1,44 @@
+#!/bin/bash
+set -euxo pipefail
+
+dnf update -y
+dnf install -y git docker java-17-amazon-corretto awscli
+
+systemctl enable docker
+systemctl start docker
+
+wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+dnf install -y jenkins
+
+usermod -aG docker jenkins
+systemctl enable jenkins
+systemctl start jenkins
+
+mkdir -p /var/lib/jenkins/init.groovy.d
+cat >/var/lib/jenkins/init.groovy.d/basic-security.groovy <<'GROOVY'
+import jenkins.model.*
+import hudson.security.*
+
+def instance = Jenkins.get()
+def hudsonRealm = new HudsonPrivateSecurityRealm(false)
+hudsonRealm.createAccount("${jenkins_admin_username}", "${jenkins_admin_password}")
+instance.setSecurityRealm(hudsonRealm)
+
+def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
+strategy.setAllowAnonymousRead(false)
+instance.setAuthorizationStrategy(strategy)
+instance.save()
+GROOVY
+
+if command -v jenkins-plugin-cli >/dev/null 2>&1; then
+  jenkins-plugin-cli --plugins workflow-aggregator git github docker-workflow credentials-binding
+fi
+
+cat >/opt/project-build-info.txt <<EOF
+PROJECT_GIT_URL=${project_git_url}
+PROJECT_GIT_BRANCH=${project_git_branch}
+EOF
+
+chown -R jenkins:jenkins /var/lib/jenkins/init.groovy.d
+systemctl restart jenkins

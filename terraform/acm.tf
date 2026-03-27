@@ -47,6 +47,7 @@
 
 # Route53 Hosted Zone
 resource "aws_route53_zone" "main" {
+  count = var.create_route53_records ? 1 : 0
   name = var.domain_name
 
   tags = {
@@ -56,7 +57,8 @@ resource "aws_route53_zone" "main" {
 
 # Route53 DNS Record pointing to ALB
 resource "aws_route53_record" "alb" {
-  zone_id = aws_route53_zone.main.zone_id
+  count   = var.create_route53_records ? 1 : 0
+  zone_id = aws_route53_zone.main[0].zone_id
   name    = var.domain_name
   type    = "A"
 
@@ -69,7 +71,8 @@ resource "aws_route53_record" "alb" {
 
 # Route53 DNS Record for www subdomain
 resource "aws_route53_record" "alb_www" {
-  zone_id = aws_route53_zone.main.zone_id
+  count   = var.create_route53_records ? 1 : 0
+  zone_id = aws_route53_zone.main[0].zone_id
   name    = "www.${var.domain_name}"
   type    = "A"
 
