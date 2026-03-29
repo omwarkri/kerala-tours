@@ -18,6 +18,13 @@ pipeline {
 
     stages {
 
+        stage('Clean Workspace') {
+            steps {
+                echo '🧹 Cleaning workspace...'
+                cleanWs()
+            }
+        }
+
         stage('Checkout') {
             steps {
                 echo '📦 Checking out source code...'
@@ -131,6 +138,7 @@ pipeline {
             echo '❌ Pipeline FAILED — Check Console Output above.'
         }
         always {
+            echo '🧹 Cleaning Docker images...'
             sh 'docker image prune -f'
         }
     }
