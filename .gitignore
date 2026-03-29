@@ -1,9 +1,5 @@
-# ================================
-
-# Node / React
-
-# ================================
-
+cat > .gitignore << 'EOF'
+# Node
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -11,22 +7,12 @@ yarn-error.log*
 .pnp
 .pnp.js
 
-# ================================
-
-# Build & Production
-
-# ================================
-
+# Build
 build/
 dist/
 coverage/
 
-# ================================
-
-# Environment Files (Secrets)
-
-# ================================
-
+# Environment
 .env
 .env.*
 .env.local
@@ -34,61 +20,50 @@ coverage/
 .env.test.local
 .env.production.local
 
-# ================================
-
-# Terraform
-
-# ================================
-
-.terraform/
+# Terraform — ignore entire folder and all state
+terraform/
 *.tfstate
 *.tfstate.*
 *.tfstate.backup
 *.tfplan
+.terraform/
 .terraform.lock.hcl
+terraform.tfvars
 
-# ================================
-
-# AWS Credentials
-
-# ================================
-
+# AWS
 .aws/
 
-# ================================
+# Scripts (infra only)
+deploy.sh
+destroy.sh
+setup.sh
+setup-environment.sh
 
 # Logs
-
-# ================================
-
 *.log
 deployment.log
 
-# ================================
+# Docs (infra only)
+00_START_HERE.md
+DEPLOYMENT_CHECKLIST.md
+DEPLOYMENT_GUIDE.md
+ENVIRONMENTS.md
+INDEX.md
+INFRASTRUCTURE_SUMMARY.md
+MONITORING_GUIDE.md
+PROJECT_STRUCTURE.txt
+README_DEPLOYMENT.md
+task-def.json
 
-# OS Files
-
-# ================================
-
+# OS
 .DS_Store
 Thumbs.db
 
-# ================================
-
-# IDE / Editors
-
-# ================================
-
+# IDE
 .vscode/
 .idea/
 
-# ================================
-
-# Temporary Files
-
-# ================================
-
+# Temp
 *.tmp
 *.bak
-
-terraform.tfvars
+EOF

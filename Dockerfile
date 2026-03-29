@@ -1,32 +1,32 @@
-# ---------- Stage 1: Build ----------
-FROM node:18-alpine AS builder
+# Stage 1 — Install dependencies
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
 
+# Stage 2 — Build
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build --if-present
+
+# Stage 3 — Production image
+FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+ENV NODE_ENV=production
+ENV PORT=80
 
-# Install dependencies
-RUN npm install
+# Copy only what's needed
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app .
 
-# Copy project files
-COPY . .
+# Non-root user for security
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
 
-# Build the React app
-RUN npm run build
-
-
-# ---------- Stage 2: Serve with Nginx ----------
-FROM nginx:alpine
-
-# Remove default nginx website
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copy build files from builder stage
-COPY --from=builder /app/build /usr/share/nginx/html
-
-# Expose port
 EXPOSE 80
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server.js"]
