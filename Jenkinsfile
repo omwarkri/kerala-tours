@@ -8,7 +8,7 @@ pipeline {
         IMAGE_TAG           = "${env.BUILD_NUMBER}"
         ECR_REGISTRY        = "782696281574.dkr.ecr.ap-south-1.amazonaws.com"
         FULL_IMAGE_NAME     = "782696281574.dkr.ecr.ap-south-1.amazonaws.com/kerala-toors:${env.BUILD_NUMBER}"
-        ECS_CLUSTER         = "kerala-tours-cluster"
+        ECS_CLUSTER         = "kerala-tours-cluster-v2"
         ECS_SERVICE         = "kerala-tours-service"
     }
 
