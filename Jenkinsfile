@@ -12,7 +12,7 @@ pipeline {
         ECS_CLUSTER         = "kerala-tours-cluster-v2"
         ECS_SERVICE         = "kerala-tours-service"
         TASK_FAMILY         = "kerala-tours-task"
-        TERRAFORM_DIR       = "infra"
+        TERRAFORM_DIR       = "terraform/files"
     }
 
     triggers {
