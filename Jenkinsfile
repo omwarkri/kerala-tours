@@ -215,17 +215,15 @@ pipeline {
         // BLUE/GREEN DEPLOY (CODEDEPLOY)
         // ==============================
         stage('Blue/Green Deploy') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                ]]) {
-                    script {
-                        // Write appspec to file to avoid shell escaping issues
-                        def appSpec = """
-{
+    steps {
+        withCredentials([[
+            $class: 'AmazonWebServicesCredentialsBinding',
+            credentialsId: 'aws-credentials',
+            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+        ]]) {
+            script {
+                def appSpec = """{
   "version": 1,
   "Resources": [{
     "TargetService": {
@@ -240,21 +238,21 @@ pipeline {
     }
   }]
 }"""
-                        writeFile file: 'appspec-content.json', text: appSpec
+                writeFile file: 'appspec-content.json', text: appSpec
 
-                        sh """
-                            aws deploy create-deployment \
-                              --application-name kerala-codedeploy-app \
-                              --deployment-group-name kerala-deploy-group \
-                              --revision revisionType=AppSpecContent,appSpecContent='{
-                                "content": "$(cat appspec-content.json | sed 's/"/\\\\"/g')"
-                              }'
-                        """
-                    }
-                }
+                def revision = """revisionType=AppSpecContent,appSpecContent={"content":${groovy.json.JsonOutput.toJson(appSpec)}}"""
+                writeFile file: 'revision.txt', text: revision
+
+                sh '''
+                    aws deploy create-deployment \
+                      --application-name kerala-codedeploy-app \
+                      --deployment-group-name kerala-deploy-group \
+                      --revision "$(cat revision.txt)"
+                '''
             }
         }
-
+    }
+}
         // ==============================
         // VERIFY DEPLOYMENT
         // ==============================
