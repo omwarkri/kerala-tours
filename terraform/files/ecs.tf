@@ -80,10 +80,10 @@ resource "aws_ecs_task_definition" "task" {
 resource "aws_ecs_service" "service" {
   name            = "kerala-tours-service-v2"
   cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.task.arn  # ✅ THIS WAS MISSING
   desired_count   = 1
   launch_type     = "FARGATE"
 
-  # 🔥 IMPORTANT
   deployment_controller {
     type = "CODE_DEPLOY"
   }
@@ -94,15 +94,20 @@ resource "aws_ecs_service" "service" {
     assign_public_ip = true
   }
 
-  # 🔥 ONLY BLUE TARGET GROUP
   load_balancer {
     target_group_arn = aws_lb_target_group.blue.arn
     container_name   = "kerala-container"
     container_port   = var.container_port
   }
 
+  # ✅ Ignore changes CodeDeploy manages after first deploy
+  lifecycle {
+    ignore_changes = [task_definition, load_balancer]
+  }
+
   depends_on = [
-    aws_lb_listener.https
+    aws_lb_listener.https,
+    aws_iam_role_policy_attachment.ecs_task_execution
   ]
 
   tags = {
