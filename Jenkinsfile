@@ -21,7 +21,6 @@ pipeline {
 
     stages {
 
-        // Single checkout at the top — used by both Terraform and App stages
         stage('Checkout') {
             steps {
                 checkout scm
@@ -29,7 +28,7 @@ pipeline {
         }
 
         // ==============================
-        // TERRAFORM (INFRASTRUCTURE)
+        // TERRAFORM (FIXED)
         // ==============================
         stage('Terraform Init') {
             steps {
@@ -40,29 +39,30 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
                     dir("${TERRAFORM_DIR}") {
-                        sh 'terraform init'
+                        sh 'terraform init -input=false'
                     }
                 }
             }
         }
 
         stage('Terraform Plan') {
-    steps {
-        withCredentials([[
-            $class: 'AmazonWebServicesCredentialsBinding',
-            credentialsId: 'aws-credentials',
-            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-        ]]) {
-            dir("${TERRAFORM_DIR}") {
-                sh '''
-                terraform init -input=false
-                terraform plan -input=false
-                '''
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    dir("${TERRAFORM_DIR}") {
+                        sh '''
+                        terraform plan \
+                          -input=false \
+                          -out=tfplan
+                        '''
+                    }
+                }
             }
         }
-    }
-}
 
         stage('Terraform Apply') {
             steps {
@@ -73,7 +73,11 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
                     dir("${TERRAFORM_DIR}") {
-                        sh 'terraform apply -auto-approve'
+                        sh '''
+                        terraform apply \
+                          -input=false \
+                          -auto-approve tfplan
+                        '''
                     }
                 }
             }
@@ -104,15 +108,13 @@ pipeline {
         }
 
         // ==============================
-        // DOCKER BUILD WITH CACHE
+        // DOCKER BUILD
         // ==============================
         stage('Docker Build') {
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    credentialsId: 'aws-credentials'
                 ]]) {
                     sh """
                         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
@@ -130,9 +132,6 @@ pipeline {
             }
         }
 
-        // ==============================
-        // SECURITY SCAN (TRIVY)
-        // ==============================
         stage('Image Scan') {
             steps {
                 sh """
@@ -143,16 +142,11 @@ pipeline {
             }
         }
 
-        // ==============================
-        // PUSH TO ECR
-        // ==============================
         stage('Push to ECR') {
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    credentialsId: 'aws-credentials'
                 ]]) {
                     sh """
                         docker push ${FULL_IMAGE_NAME}
@@ -164,15 +158,13 @@ pipeline {
         }
 
         // ==============================
-        // IMMUTABLE TASK DEFINITION
+        // ECS DEPLOY
         // ==============================
         stage('Register Task Definition') {
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    credentialsId: 'aws-credentials'
                 ]]) {
                     sh """
                         aws ecs register-task-definition \
@@ -188,16 +180,11 @@ pipeline {
             }
         }
 
-        // ==============================
-        // GET LATEST REVISION
-        // ==============================
         stage('Fetch Task Revision') {
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    credentialsId: 'aws-credentials'
                 ]]) {
                     script {
                         env.TASK_REVISION = sh(
@@ -214,64 +201,33 @@ pipeline {
             }
         }
 
-        // ==============================
-        // BLUE/GREEN DEPLOY (CODEDEPLOY)
-        // ==============================
-        stage('Blue/Green Deploy') {
-    steps {
-        withCredentials([[
-            $class: 'AmazonWebServicesCredentialsBinding',
-            credentialsId: 'aws-credentials',
-            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-        ]]) {
-            script {
-                def appSpec = """{
-  "version": 1,
-  "Resources": [{
-    "TargetService": {
-      "Type": "AWS::ECS::Service",
-      "Properties": {
-        "TaskDefinition": "${env.TASK_FAMILY}:${env.TASK_REVISION}",
-        "LoadBalancerInfo": {
-          "ContainerName": "kerala-container",
-          "ContainerPort": 80
-        }
-      }
-    }
-  }]
-}"""
-                writeFile file: 'appspec-content.json', text: appSpec
-
-                def revision = """revisionType=AppSpecContent,appSpecContent={"content":${groovy.json.JsonOutput.toJson(appSpec)}}"""
-                writeFile file: 'revision.txt', text: revision
-
-                sh '''
-                    aws deploy create-deployment \
-                      --application-name kerala-codedeploy-app \
-                      --deployment-group-name kerala-deploy-group \
-                      --revision "$(cat revision.txt)"
-                '''
+        stage('Deploy') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials'
+                ]]) {
+                    sh """
+                        aws ecs update-service \
+                          --cluster ${ECS_CLUSTER} \
+                          --service ${ECS_SERVICE} \
+                          --task-definition ${TASK_FAMILY}:${TASK_REVISION} \
+                          --force-new-deployment
+                    """
+                }
             }
         }
-    }
-}
-        // ==============================
-        // VERIFY DEPLOYMENT
-        // ==============================
+
         stage('Verify Deployment') {
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    credentialsId: 'aws-credentials'
                 ]]) {
                     sh """
                         aws ecs wait services-stable \
                           --cluster ${ECS_CLUSTER} \
-                          --services ${ECS_SERVICE} \
-                          --region ${AWS_DEFAULT_REGION}
+                          --services ${ECS_SERVICE}
                     """
                 }
             }
@@ -280,24 +236,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ SUCCESS — Blue/Green Deployment Completed'
+            echo '✅ SUCCESS — Deployment Completed'
         }
         failure {
-            echo '❌ FAILED — Forcing new deployment as fallback...'
-            withCredentials([[
-                $class: 'AmazonWebServicesCredentialsBinding',
-                credentialsId: 'aws-credentials',
-                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-            ]]) {
-                sh """
-                    aws ecs update-service \
-                      --cluster ${ECS_CLUSTER} \
-                      --service ${ECS_SERVICE} \
-                      --force-new-deployment \
-                      --region ${AWS_DEFAULT_REGION}
-                """
-            }
+            echo '❌ FAILED — Check logs'
         }
         always {
             sh 'docker image prune -f'
