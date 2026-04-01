@@ -21,7 +21,7 @@ coverage/
 .env.production.local
 
 # Terraform — ignore entire folder and all state
-terraform/
+terraform/files/.terraform/
 *.tfstate
 *.tfstate.*
 *.tfstate.backup
