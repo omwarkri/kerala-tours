@@ -27,13 +27,13 @@ const ContactPage = () => {
               <div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">Call Us</h3>
                 <p className="text-gray-700 mb-1">
-                  <a href="tel:+919028803309" className="hover:text-emerald-600 transition duration-200 font-semibold text-lg">
-                    +91-9028803309
+                  <a href="tel:+917620290632" className="hover:text-emerald-600 transition duration-200 font-semibold text-lg">
+                    +91-7620290632
                   </a>
                 </p>
                 <p className="text-gray-700">
-                  <a href="tel:+919028803309" className="hover:text-emerald-600 transition duration-200 font-semibold text-lg">
-                    +91-9028803309
+                  <a href="tel:+918080864204" className="hover:text-emerald-600 transition duration-200 font-semibold text-lg">
+                    +91-8080864204
                   </a>
                 </p>
                 <p className="text-sm text-gray-600 mt-2 font-medium">Direct line to our travel experts</p>
@@ -49,12 +49,12 @@ const ContactPage = () => {
                 <h3 className="text-xl font-bold text-gray-800 mb-2">WhatsApp</h3>
                 <p className="text-gray-700 mb-1">
                   <a 
-                    href="https://wa.me/919028803309" 
+                    href="https://wa.me/917620290632" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="hover:text-emerald-600 transition duration-200 font-semibold text-lg"
                   >
-                    +91-9028803309
+                    +91-7620290632
                   </a>
                 </p>
                 <p className="text-sm text-gray-600 font-medium">24/7 Available • Instant Response</p>
@@ -103,7 +103,7 @@ const ContactPage = () => {
           {/* Quick Contact Buttons */}
           <div className="space-y-4 max-w-md mx-auto">
             <a
-              href="https://wa.me/919028803309"
+              href="https://wa.me/917620290632"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 transform shadow-lg hover:shadow-xl flex items-center justify-center"
@@ -113,7 +113,7 @@ const ContactPage = () => {
               <span className="ml-2">→</span>
             </a>
             <a
-              href="tel:+919028803309"
+              href="tel:+917620290632"
               className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 transform shadow-lg hover:shadow-xl flex items-center justify-center"
             >
               <span className="mr-3 text-2xl">📞</span>

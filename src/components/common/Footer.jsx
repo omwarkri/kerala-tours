@@ -6,8 +6,8 @@ const Footer = () => {
   const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
 
   const whatsappNumbers = [
-    { number: "919028803309", display: "+91-9028803309" },
-    { number: "919146385636", display: "+91-9146385636" }
+    { number: "917620290632", display: "+91-7620290632" },
+    { number: "918080864204", display: "+91-8080864204" }
   ];
 
   const openWhatsApp = (phoneNumber) => {
@@ -194,11 +194,11 @@ const Footer = () => {
                   <span className="text-emerald-400 font-medium">Call Us:</span>
                 </div>
                 <div className="ml-6 space-y-1">
-                  <a href="tel:+919028803309" className="hover:text-emerald-400 block text-white font-medium">
-                    +91-9028803309
+                  <a href="tel:+917620290632" className="hover:text-emerald-400 block text-white font-medium">
+                    +91-7620290632
                   </a>
-                  <a href="tel:+919146385636" className="hover:text-emerald-400 block text-white font-medium">
-                    +91-9146385636
+                  <a href="tel:+918080864204" className="hover:text-emerald-400 block text-white font-medium">
+                    +91-8080864204
                   </a>
                 </div>
               </div>

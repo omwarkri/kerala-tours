@@ -7,14 +7,14 @@ const ContactPage = () => {
 
   // WhatsApp numbers
   const whatsappNumbers = [
-    "919028803309",
-    "919146385636"
+    "917620290632",
+    "918080864204"
   ];
 
   // Phone numbers for calls
   const phoneNumbers = [
-    "919028803309",
-    "919146385636"
+    "917620290632",
+    "918080864204"
   ];
 
   const handleWhatsAppClick = () => {
@@ -64,11 +64,11 @@ const ContactPage = () => {
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 mb-2">Call Us</h3>
-                <a href="tel:+919028803309" className="block text-gray-700 hover:text-blue-600 transition-colors">
-                  +91-9028803309
+                <a href="tel:+917620290632" className="block text-gray-700 hover:text-blue-600 transition-colors">
+                  +91 7620290632
                 </a>
-                <a href="tel:+919146385636" className="block text-gray-700 hover:text-blue-600 transition-colors">
-                  +91-9146385636
+                <a href="tel:+918080864204" className="block text-gray-700 hover:text-blue-600 transition-colors">
+                  +91 8080864204
                 </a>
               </div>
             </div>
@@ -81,7 +81,7 @@ const ContactPage = () => {
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 mb-2">WhatsApp</h3>
                 <a 
-                  href="https://wa.me/919028803309" 
+                  href="https://wa.me/917620290632" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="block text-gray-700 hover:text-green-600 transition-colors"
@@ -89,7 +89,7 @@ const ContactPage = () => {
                   +91-9028803309
                 </a>
                 <a 
-                  href="https://wa.me/919146385636" 
+                  href="https://wa.me/918080864204" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="block text-gray-700 hover:text-green-600 transition-colors"

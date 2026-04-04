@@ -34,14 +34,14 @@ const Navigation = () => {
 
   const phoneNumbers = [
     {
-      number: "+91 90288 03309",
-      whatsapp: "https://wa.me/919028803309",
-      call: "tel:+919028803309"
+      number: "+91 76202 90632",
+      whatsapp: "https://wa.me/917620290632",
+      call: "tel:+917620290632"
     },
     {
-      number: "+91 91463 85636",
-      whatsapp: "https://wa.me/919146385636",
-      call: "tel:+919146385636"
+      number: "+91 80808 64204",
+      whatsapp: "https://wa.me/918080864204",
+      call: "tel:+918080864204"
     }
   ];
 

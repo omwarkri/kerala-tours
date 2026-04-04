@@ -1,102 +1,56 @@
 pipeline {
     agent any
 
-    environment {
-        AWS_DEFAULT_REGION  = 'ap-south-1'
-        AWS_ACCOUNT_ID      = '782696281574'
-        ECR_REPO_NAME       = 'kerala-toors'
-        IMAGE_TAG           = "${env.BUILD_NUMBER}"
-        ECR_REGISTRY        = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-        FULL_IMAGE_NAME     = "${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG}"
-
-        ECS_CLUSTER         = "kerala-tours-cluster-v2"
-        ECS_SERVICE         = "kerala-tours-service"
-        TASK_FAMILY         = "kerala-tours-task"
-        TERRAFORM_DIR       = "terraform/files"
-    }
-
-    triggers {
-        githubPush()
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '10'))
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
+                echo '✓ Code checked out successfully'
             }
         }
 
-        // ==============================
-        // TERRAFORM (FIXED)
-        // ==============================
-        stage('Terraform Init') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                ]]) {
-                    dir("${TERRAFORM_DIR}") {
-                        sh 'terraform init -input=false'
-                    }
-                }
-            }
-        }
-
-        stage('Terraform Plan') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                ]]) {
-                    dir("${TERRAFORM_DIR}") {
-                        sh '''
-                        terraform plan \
-                          -input=false \
-                          -out=tfplan
-                        '''
-                    }
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                ]]) {
-                    dir("${TERRAFORM_DIR}") {
-                        sh '''
-                        terraform apply \
-                          -input=false \
-                          -auto-approve tfplan
-                        '''
-                    }
-                }
-            }
-        }
-
-        // ==============================
-        // APP PIPELINE
-        // ==============================
         stage('Install Dependencies') {
             steps {
                 sh 'npm ci'
+                echo '✓ Dependencies installed'
             }
         }
 
         stage('Build Application') {
             steps {
                 sh 'npm run build'
+                echo '✓ Application built successfully'
             }
         }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh '''
+                        docker build -t travels-tours:${BUILD_NUMBER} .
+                        docker tag travels-tours:${BUILD_NUMBER} travels-tours:latest
+                        echo "✓ Docker image built: travels-tours:${BUILD_NUMBER}"
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✓ Pipeline completed successfully!'
+            echo "Build artifact at: /home/om/travels-Toors/build/"
+        }
+        failure {
+            echo '✗ Pipeline failed. Check logs above.'
+        }
+    }
+}
 
         stage('Test & Lint (Parallel)') {
             parallel {

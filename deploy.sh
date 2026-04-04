@@ -1,33 +1,47 @@
 #!/bin/bash
 
-set -euo pipefail
+echo "🚀 Travels Toors Application Deployment Script"
+echo "=============================================="
 
-AWS_REGION="ap-south-1"
-AWS_ACCOUNT_ID="782696281574"
-ECR_REPO_NAME="kerala-toors"
-IMAGE_TAG="${BUILD_NUMBER:-latest}"
+# Check if Node exists
+if ! command -v node &> /dev/null; then
+    echo "❌ Node.js is not installed. Please install Node.js first."
+    exit 1
+fi
 
-ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-FULL_IMAGE_NAME="${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG}"
+echo "✓ Node.js found: $(node --version)"
 
-ECS_CLUSTER_NAME="kerala-toors-cluster"
-ECS_SERVICE_NAME="kerala-toors-service"
-TASK_DEFINITION_NAME="kerala-toors"
-CONTAINER_NAME="kerala-toors"
+# Install dependencies
+echo ""
+echo "📦 Installing dependencies..."
+npm ci
 
-# ✅ REQUIRED (fixes your error)
-EXECUTION_ROLE_ARN="arn:aws:iam::782696281574:role/ecsTaskExecutionRole"
+if [ $? -ne 0 ]; then
+    echo "❌ Failed to install dependencies"
+    exit 1
+fi
 
-echo "🚀 Starting deployment"
-echo "Image: ${FULL_IMAGE_NAME}"
+echo "✓ Dependencies installed successfully"
 
-# Step 1: ECR Login
-aws ecr get-login-password --region "$AWS_REGION" \
-| docker login --username AWS --password-stdin "$ECR_REGISTRY"
+# Build application
+echo ""
+echo "🔨 Building application..."
+npm run build
 
-# Step 2: Verify image exists
-aws ecr describe-images \
-  --repository-name "$ECR_REPO_NAME" \
+if [ $? -ne 0 ]; then
+    echo "❌ Failed to build application"
+    exit 1
+fi
+
+echo "✓ Application built successfully"
+echo ""
+echo "✅ Deployment complete!"
+echo ""
+echo "📝 To run the application:"
+echo "   npm start              # Development mode on port 3000"
+echo "   npm run serve          # Production mode on port 3000"
+echo ""
+echo "Build output is in: ./build/"
   --image-ids imageTag="$IMAGE_TAG" \
   --region "$AWS_REGION" > /dev/null
 

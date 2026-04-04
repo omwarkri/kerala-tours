@@ -808,7 +808,7 @@ often at home-style meals and festive occasions.`,
                 <div className="space-y-3">
                   <div className="flex flex-col space-y-2">
                     <a 
-                      href="tel:+919028803309" 
+                      href="tel:+917620290632" 
                       className="bg-white border border-blue-200 text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"
                     >
                       +91 90288 03309
@@ -831,7 +831,7 @@ often at home-style meals and festive occasions.`,
               
               <div className="space-y-3">
                 <a
-                  href="https://wa.me/919028803309?text=Hi! I'm interested in experiencing Kerala's culture and would like more information."
+                  href="https://wa.me/917620290632?text=Hi! I'm interested in experiencing Kerala's culture and would like more information."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"

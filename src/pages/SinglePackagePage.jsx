@@ -12,14 +12,14 @@ const SinglePackagePage = () => {
   
   // WhatsApp numbers
   const whatsappNumbers = [
-    "919028803309",
-    "919146385636"
+    "917620290632",
+    "918080864204"
   ];
 
   // Phone numbers for calls
   const phoneNumbers = [
-    "919028803309",
-    "919146385636"
+    "917620290632",
+    "918080864204"
   ];
 
   const handleWhatsAppClick = () => {

@@ -2291,8 +2291,8 @@ const SinglePlacePage = () => {
 
   // Phone numbers
   const phoneNumbers = [
-    { number: "+919028803309", display: "+91 9028803309" },
-    { number: "+919146385636", display: "+91 9146385636" }
+    { number: "+917620290632", display: "+91 7620290632" },
+    { number: "+918080864204", display: "+91 8080864204" }
   ];
 
   const openContactModal = (type) => {

@@ -110,7 +110,7 @@ const FAQ = ({ id = "faq" }) => {
           </p>
           <div className="flex flex-col sm:flex-row gap-2 justify-center">
             <a
-              href="https://wa.me/919028803309"
+              href="https://wa.me/917620290632"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 font-medium transition duration-200 flex items-center justify-center text-xs md:text-sm"
@@ -119,7 +119,7 @@ const FAQ = ({ id = "faq" }) => {
               WhatsApp Us
             </a>
             <a
-              href="tel:+919028803309"
+              href="tel:+917620290632"
               className="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2  font-medium transition duration-200 flex items-center justify-center text-xs md:text-sm"
             >
               <span className="mr-2">📞</span>

@@ -9,8 +9,8 @@ const TourPackageCard = ({ pkg }) => {
 
   // WhatsApp numbers
   const whatsappNumbers = [
-    "919028803309",
-    "919146385636"
+    "917620290632",
+    "918080864204"
   ];
 
   const handleWhatsAppClick = () => {

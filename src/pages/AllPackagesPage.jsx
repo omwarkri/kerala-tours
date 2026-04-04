@@ -802,7 +802,7 @@ const AllPackagesPage = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="https://wa.me/919028803309"
+              href="https://wa.me/917620290632"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center bg-white text-emerald-600 px-8 py-4 rounded-xl font-semibold hover:bg-emerald-50 transition duration-300 shadow-lg"
@@ -810,7 +810,7 @@ const AllPackagesPage = () => {
               💬 Get Custom Quote on WhatsApp
             </a>
             <a
-              href="tel:+919028803309"
+              href="tel:+917620290632"
               className="inline-flex items-center bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-emerald-600 transition duration-300"
             >
               📞 Call for Customization

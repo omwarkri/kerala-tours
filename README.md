@@ -1,71 +1,144 @@
-# Getting Started with Create React App
+# Travels Toors - Kerala Tourism Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React-based web application for exploring Kerala's beautiful destinations and tour packages.
 
-## Available Scripts
+## 🚀 Quick Start
 
-In the project directory, you can run:
+### Prerequisites
+- Node.js 18+ and npm
+- Docker (optional, for containerized deployment)
 
-### `npm start`
+### Installation & Development
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+# 1. Install dependencies
+npm ci
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# 2. Start development server
+npm start
+```
 
-### `npm test`
+The application will open at `http://localhost:3000`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📦 Scripts
 
-### `npm run build`
+```bash
+npm start       # Start development server (port 3000)
+npm run build   # Create production build
+npm run serve   # Serve production build locally (port 3000)
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🐳 Docker Deployment
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Build Docker Image
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+docker build -t travels-tours:latest .
+```
 
-### `npm run eject`
+### Run Container
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+# Run on port 80
+docker run -p 80:8080 travels-tours:latest
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Or custom port
+docker run -p 3000:80 travels-tours:latest
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Access at `http://localhost:3000`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🔧 Jenkins Pipeline
 
-## Learn More
+The application includes a simple Jenkins pipeline for automated builds:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+Stages:
+1. Checkout     - Clone repository
+2. Install      - npm ci
+3. Build        - npm run build
+4. Docker Build - Build Docker image
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Run Locally
 
-### Code Splitting
+```bash
+./deploy.sh
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 📱 Contact Information
 
-### Analyzing the Bundle Size
+**Phone Numbers:**
+- 📞 +91 7620290632
+- 📞 +91 8080864204
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+**WhatsApp:** Available on the same numbers (24/7)
 
-### Making a Progressive Web App
+## 📁 Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
+src/
+├── components/
+│   ├── common/        # Reusable components
+│   ├── HomePage/      # Home page components
+│   └── places/        # Place-related components
+├── pages/            # Page components
+├── data/             # Static data
+├── services/         # Service utilities
+└── App.js            # Main app component
 
-### Advanced Configuration
+public/
+├── index.html        # HTML entry point
+├── manifest.json     # PWA manifest
+└── robots.txt        # SEO robots file
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 🎨 Technologies
 
-### Deployment
+- **Frontend:** React 19, React Router 7, Tailwind CSS 3
+- **Icons:** Lucide React
+- **Build:** React Scripts 5
+- **Server:** Nginx (production)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📝 Environment Variables
 
-### `npm run build` fails to minify
+Create `.env` file (optional):
+```env
+REACT_APP_API_URL=https://your-api.com
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# omkartourandtraveldemo
+## 🚢 Production Deployment
+
+### Using Docker
+```bash
+docker build -t travels-tours:latest .
+docker run -d -p 80:80 travels-tours:latest
+```
+
+### Using Node
+```bash
+npm run build
+npm run serve
+```
+
+## 🔐 Security
+
+- `.env` files are not committed
+- Sensitive data kept locally
+- Uses secure WhatsApp/Call integration
+
+## 📊 Performance
+
+- Optimized production builds
+- SEO-friendly structure
+- Responsive design for all devices
+
+## 📞 Support
+
+For issues or questions:
+- **Call:** +91 7620290632 or +91 8080864204
+- **WhatsApp:** Same numbers available 24/7
+
+## 📄 License
+
+This project is maintained by Travels Toors
