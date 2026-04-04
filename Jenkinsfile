@@ -92,11 +92,17 @@ pipeline {
             }
         }
 
+        stage('Build Application') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
         stage('Test & Lint (Parallel)') {
             parallel {
                 stage('Tests') {
                     steps {
-                        sh 'npm test --if-present'
+                        sh 'CI=true npm test --if-present -- --watchAll=false'
                     }
                 }
                 stage('Lint') {
