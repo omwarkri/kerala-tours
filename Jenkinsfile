@@ -6,7 +6,19 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '10'))
     }
 
+    environment {
+        AWS_DEFAULT_REGION = 'ap-south-1'
+        ECR_REGISTRY        = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        ECR_REPO_NAME       = 'kerala-tours'
+        IMAGE_TAG           = "${BUILD_NUMBER}"
+        FULL_IMAGE_NAME     = "${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG}"
+        TASK_FAMILY         = 'kerala-task'
+        ECS_CLUSTER         = 'kerala-cluster'
+        ECS_SERVICE         = 'kerala-service'
+    }
+
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -20,37 +32,6 @@ pipeline {
                 echo '✓ Dependencies installed'
             }
         }
-
-        stage('Build Application') {
-            steps {
-                sh 'npm run build'
-                echo '✓ Application built successfully'
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh '''
-                        docker build -t travels-tours:${BUILD_NUMBER} .
-                        docker tag travels-tours:${BUILD_NUMBER} travels-tours:latest
-                        echo "✓ Docker image built: travels-tours:${BUILD_NUMBER}"
-                    '''
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            echo '✓ Pipeline completed successfully!'
-            echo "Build artifact at: /home/om/travels-Toors/build/"
-        }
-        failure {
-            echo '✗ Pipeline failed. Check logs above.'
-        }
-    }
-}
 
         stage('Test & Lint (Parallel)') {
             parallel {
@@ -67,9 +48,13 @@ pipeline {
             }
         }
 
-        // ==============================
-        // DOCKER BUILD
-        // ==============================
+        stage('Build Application') {
+            steps {
+                sh 'npm run build'
+                echo '✓ Application built successfully'
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 withCredentials([[
@@ -117,9 +102,6 @@ pipeline {
             }
         }
 
-        // ==============================
-        // ECS DEPLOY
-        // ==============================
         stage('Register Task Definition') {
             steps {
                 withCredentials([[
@@ -197,6 +179,7 @@ pipeline {
     post {
         success {
             echo '✅ SUCCESS — Deployment Completed'
+            echo "Build artifact: ${FULL_IMAGE_NAME}"
         }
         failure {
             echo '❌ FAILED — Check logs'
