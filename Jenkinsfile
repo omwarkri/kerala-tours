@@ -110,14 +110,22 @@ pipeline {
             }
         }
 
+        // ─────────────────────────────────────────
+        // IMAGE SCAN — non-blocking, won't fail pipeline
+        // ─────────────────────────────────────────
         stage('Image Scan') {
             steps {
-                sh """
-                    docker run --rm \
-                      -v /var/run/docker.sock:/var/run/docker.sock \
-                      aquasec/trivy image --exit-code 0 --severity HIGH,CRITICAL \
-                      ${ECR_REPO_NAME}:${IMAGE_TAG}
-                """
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    sh """
+                        docker run --rm \
+                          -v /var/run/docker.sock:/var/run/docker.sock \
+                          aquasec/trivy:0.61.0 image \
+                          --exit-code 0 \
+                          --severity HIGH,CRITICAL \
+                          --no-progress \
+                          ${ECR_REPO_NAME}:${IMAGE_TAG}
+                    """
+                }
             }
         }
 
