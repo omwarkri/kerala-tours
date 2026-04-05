@@ -1,25 +1,17 @@
 pipeline {
     agent any
 
-    options {
-        timeout(time: 30, unit: 'MINUTES')
-        buildDiscarder(logRotator(numToKeepStr: '10'))
-    }
-
     environment {
-        AWS_DEFAULT_REGION = 'ap-south-1'
-        ECR_REPO_NAME      = 'kerala-tours'
-        IMAGE_TAG          = "${BUILD_NUMBER}"
-        TASK_FAMILY        = 'kerala-task'
-        ECS_CLUSTER        = 'kerala-cluster'
-        ECS_SERVICE        = 'kerala-service'
+        AWS_REGION   = 'ap-south-1'
+        ECR_REPO     = 'kerala-tours'
+        IMAGE_TAG    = "${BUILD_NUMBER}"
+        CLUSTER      = 'kerala-cluster'
+        SERVICE      = 'kerala-service'
+        TASK_FAMILY  = 'kerala-task'
     }
 
     stages {
 
-        // ─────────────────────────────────────────
-        // INIT — resolve AWS account ID dynamically
-        // ─────────────────────────────────────────
         stage('Init') {
             steps {
                 withCredentials([[
@@ -27,105 +19,33 @@ pipeline {
                     credentialsId: 'aws-credentials'
                 ]]) {
                     script {
-                        env.AWS_ACCOUNT_ID  = sh(
-                            script: 'aws sts get-caller-identity --query Account --output text',
+                        env.AWS_ACCOUNT_ID = sh(
+                            script: "aws sts get-caller-identity --query Account --output text",
                             returnStdout: true
                         ).trim()
 
-                        env.ECR_REGISTRY    = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_DEFAULT_REGION}.amazonaws.com"
-                        env.FULL_IMAGE_NAME = "${env.ECR_REGISTRY}/${env.ECR_REPO_NAME}:${env.IMAGE_TAG}"
+                        env.ECR = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
+                        env.IMAGE = "${env.ECR}/${env.ECR_REPO}:${env.IMAGE_TAG}"
 
-                        echo "✓ AWS Account  : ${env.AWS_ACCOUNT_ID}"
-                        echo "✓ ECR Registry : ${env.ECR_REGISTRY}"
-                        echo "✓ Image        : ${env.FULL_IMAGE_NAME}"
+                        echo "ECR: ${env.ECR}"
+                        echo "Image: ${env.IMAGE}"
                     }
                 }
             }
         }
 
-        // ─────────────────────────────────────────
-        // SOURCE
-        // ─────────────────────────────────────────
         stage('Checkout') {
             steps {
-                checkout scm
-                echo '✓ Code checked out'
+                git url: 'https://github.com/omwarkri/ShareTask-App.git', branch: 'main'
             }
         }
 
-        // ─────────────────────────────────────────
-        // BUILD
-        // ─────────────────────────────────────────
-        stage('Install Dependencies') {
+        stage('Build Docker Image') {
             steps {
-                sh 'npm ci'
-                echo '✓ Dependencies installed'
-            }
-        }
-
-        stage('Test & Lint') {
-            parallel {
-                stage('Tests') {
-                    steps {
-                        sh 'CI=true npm test --if-present -- --watchAll=false'
-                    }
-                }
-                stage('Lint') {
-                    steps {
-                        sh 'npm run lint --if-present'
-                    }
-                }
-            }
-        }
-
-        stage('Build Application') {
-            steps {
-                sh 'npm run build'
-                echo '✓ Application built'
-            }
-        }
-
-        // ─────────────────────────────────────────
-        // DOCKER
-        // ─────────────────────────────────────────
-        stage('Docker Build') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials'
-                ]]) {
-                    sh """
-                        aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
-                          docker login --username AWS --password-stdin ${ECR_REGISTRY}
-
-                        docker pull ${ECR_REGISTRY}/${ECR_REPO_NAME}:latest || true
-
-                        docker build \
-                          --cache-from ${ECR_REGISTRY}/${ECR_REPO_NAME}:latest \
-                          -t ${ECR_REPO_NAME}:${IMAGE_TAG} .
-
-                        docker tag ${ECR_REPO_NAME}:${IMAGE_TAG} ${FULL_IMAGE_NAME}
-                    """
-                }
-            }
-        }
-
-        // ─────────────────────────────────────────
-        // IMAGE SCAN — non-blocking, won't fail pipeline
-        // ─────────────────────────────────────────
-        stage('Image Scan') {
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    sh """
-                        docker run --rm \
-                          -v /var/run/docker.sock:/var/run/docker.sock \
-                          aquasec/trivy:0.61.0 image \
-                          --exit-code 0 \
-                          --severity HIGH,CRITICAL \
-                          --no-progress \
-                          ${ECR_REPO_NAME}:${IMAGE_TAG}
-                    """
-                }
+                sh """
+                    docker build -t ${ECR_REPO}:${IMAGE_TAG} .
+                    docker tag ${ECR_REPO}:${IMAGE_TAG} ${IMAGE}
+                """
             }
         }
 
@@ -136,41 +56,10 @@ pipeline {
                     credentialsId: 'aws-credentials'
                 ]]) {
                     sh """
-                        docker push ${FULL_IMAGE_NAME}
+                        aws ecr get-login-password --region ${AWS_REGION} | \
+                        docker login --username AWS --password-stdin ${ECR}
 
-                        docker tag  ${FULL_IMAGE_NAME} ${ECR_REGISTRY}/${ECR_REPO_NAME}:latest
-                        docker push ${ECR_REGISTRY}/${ECR_REPO_NAME}:latest
-                    """
-                }
-            }
-        }
-
-        // ─────────────────────────────────────────
-        // ECS DEPLOY
-        // ─────────────────────────────────────────
-        stage('Register Task Definition') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials'
-                ]]) {
-                    sh """
-                        aws ecs register-task-definition \
-                          --family ${TASK_FAMILY} \
-                          --network-mode awsvpc \
-                          --requires-compatibilities FARGATE \
-                          --cpu "256" \
-                          --memory "512" \
-                          --execution-role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/ecsTaskExecutionRole \
-                          --container-definitions '[{
-                            "name":  "kerala-container",
-                            "image": "${FULL_IMAGE_NAME}",
-                            "portMappings": [{
-                              "containerPort": 80,
-                              "hostPort": 80,
-                              "protocol": "tcp"
-                            }]
-                          }]'
+                        docker push ${IMAGE}
                     """
                 }
             }
@@ -183,57 +72,43 @@ pipeline {
                     credentialsId: 'aws-credentials'
                 ]]) {
                     script {
-                        def taskRevision = sh(
+
+                        def revision = sh(
                             script: """
-                                aws ecs describe-task-definition \
-                                  --task-definition ${TASK_FAMILY} \
-                                  --query 'taskDefinition.revision' \
-                                  --output text
+                                aws ecs register-task-definition \
+                                --family ${TASK_FAMILY} \
+                                --network-mode awsvpc \
+                                --requires-compatibilities FARGATE \
+                                --cpu 256 \
+                                --memory 512 \
+                                --execution-role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/ecsTaskExecutionRole \
+                                --container-definitions '[{
+                                  "name":"app",
+                                  "image":"${IMAGE}",
+                                  "portMappings":[{"containerPort":8000}]
+                                }]' \
+                                --query 'taskDefinition.revision' \
+                                --output text
                             """,
                             returnStdout: true
                         ).trim()
 
-                        echo "✓ Deploying task revision: ${taskRevision}"
-
                         sh """
                             aws ecs update-service \
-                              --cluster ${ECS_CLUSTER} \
-                              --service ${ECS_SERVICE} \
-                              --task-definition ${TASK_FAMILY}:${taskRevision} \
-                              --force-new-deployment
+                            --cluster ${CLUSTER} \
+                            --service ${SERVICE} \
+                            --task-definition ${TASK_FAMILY}:${revision} \
+                            --force-new-deployment
                         """
                     }
-                }
-            }
-        }
-
-        stage('Verify Deployment') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials'
-                ]]) {
-                    sh """
-                        aws ecs wait services-stable \
-                          --cluster ${ECS_CLUSTER} \
-                          --services ${ECS_SERVICE}
-                    """
-                    echo '✓ Service is stable'
                 }
             }
         }
     }
 
     post {
-        success {
-            echo "✅ SUCCESS — ${env.FULL_IMAGE_NAME} deployed to ECS"
-        }
-        failure {
-            echo '❌ FAILED — Check logs above'
-        }
         always {
-            sh 'docker image prune -f'
-            cleanWs()
+            sh 'docker system prune -f || true'
         }
     }
 }
