@@ -30,12 +30,9 @@ COPY --from=builder /app/build /usr/share/nginx/html
 COPY default.conf /etc/nginx/conf.d/default.conf
 
 # Fix permissions (required for non-root nginx)
-RUN chown -R nginx:nginx /usr/share/nginx/html \
-    && chown -R nginx:nginx /var/cache/nginx \
-    && chown -R nginx:nginx /var/log/nginx \
-    && mkdir -p /var/run \
-    && touch /var/run/nginx.pid \
-    && chown -R nginx:nginx /var/run
+RUN mkdir -p /run /var/run \
+    && touch /run/nginx.pid \
+    && chown -R nginx:nginx /run /var/run /usr/share/nginx/html /var/cache/nginx /var/log/nginx
 
 # Switch to non-root user
 USER nginx

@@ -39,14 +39,29 @@ docker build -t travels-tours:latest .
 ### Run Container
 
 ```bash
-# Run on port 80
-docker run -p 80:8080 travels-tours:latest
-
-# Or custom port
-docker run -p 3000:80 travels-tours:latest
+# Run the app locally on port 3000
+docker run -d -p 3000:80 --name travels-toors travels-tours:latest
 ```
 
 Access at `http://localhost:3000`
+
+If you want to use the local helper script:
+
+```bash
+./deploy.sh build   # build the React app
+./deploy.sh docker  # build the Docker image
+```
+
+## ☁️ AWS ECS Deployment
+
+This repository already includes AWS infrastructure files under `terraform/files` and a Jenkins pipeline for ECS deployment.
+
+For AWS deployment, make sure you have:
+- AWS CLI configured with valid credentials
+- An ECR repository and ECS cluster/service in the same AWS region
+- The application container exposes port `80`
+
+The Jenkins pipeline builds the Docker image, pushes it to ECR, and updates the ECS service.
 
 ## 🔧 Jenkins Pipeline
 
@@ -63,7 +78,8 @@ Stages:
 ### Run Locally
 
 ```bash
-./deploy.sh
+./deploy.sh build
+./deploy.sh docker
 ```
 
 ## 📱 Contact Information
@@ -112,6 +128,12 @@ REACT_APP_API_URL=https://your-api.com
 ### Using Docker
 ```bash
 docker build -t travels-tours:latest .
+# Run with host port 3000 mapped to container port 80
+docker run -d -p 3000:80 travels-tours:latest
+```
+
+If you want the app to be available on host port 80, use:
+```bash
 docker run -d -p 80:80 travels-tours:latest
 ```
 

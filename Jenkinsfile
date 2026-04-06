@@ -85,7 +85,7 @@ pipeline {
                                 --container-definitions '[{
                                   "name":"app",
                                   "image":"${IMAGE}",
-                                  "portMappings":[{"containerPort":8000}]
+                                  "portMappings":[{"containerPort":80}]
                                 }]' \
                                 --query 'taskDefinition.revision' \
                                 --output text

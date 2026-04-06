@@ -1,126 +1,55 @@
 #!/bin/bash
+set -e
 
-echo "🚀 Travels Toors Application Deployment Script"
-echo "=============================================="
+echo "🚀 Travels Toors deployment helper"
+echo "========================================"
 
-# Check if Node exists
-if ! command -v node &> /dev/null; then
-    echo "❌ Node.js is not installed. Please install Node.js first."
+if ! command -v node >/dev/null 2>&1; then
+  echo "❌ Node.js is required. Install Node.js 18+ and npm."
+  exit 1
+fi
+
+if ! command -v npm >/dev/null 2>&1; then
+  echo "❌ npm is required. Install Node.js and npm."
+  exit 1
+fi
+
+case "${1:-build}" in
+  build)
+    echo "📦 Installing dependencies..."
+    npm ci
+
+    echo "🔨 Building production assets..."
+    npm run build
+
+    echo "✅ Build complete. Output available in ./build"
+    echo "👉 Run locally with Docker: ./deploy.sh docker"
+    ;;
+
+  docker)
+    if ! command -v docker >/dev/null 2>&1; then
+      echo "❌ Docker is required to build the container."
+      exit 1
+    fi
+
+    echo "📦 Building Docker image..."
+    docker build -t travels-toors:latest .
+
+    echo "✅ Docker image built: travels-toors:latest"
+    echo "👉 Run it with:"
+    echo "   docker run -d -p 3000:80 --name travels-toors travels-toors:latest"
+    echo "Visit http://localhost:3000"
+    ;;
+
+  help|-h|--help)
+    echo "Usage: ./deploy.sh [build|docker]"
+    echo "  build   - install dependencies and build the app"
+    echo "  docker  - build the Docker production image"
+    ;;
+
+  *)
+    echo "Unknown command: $1"
+    echo "Usage: ./deploy.sh [build|docker]"
     exit 1
-fi
-
-echo "✓ Node.js found: $(node --version)"
-
-# Install dependencies
-echo ""
-echo "📦 Installing dependencies..."
-npm ci
-
-if [ $? -ne 0 ]; then
-    echo "❌ Failed to install dependencies"
-    exit 1
-fi
-
-echo "✓ Dependencies installed successfully"
-
-# Build application
-echo ""
-echo "🔨 Building application..."
-npm run build
-
-if [ $? -ne 0 ]; then
-    echo "❌ Failed to build application"
-    exit 1
-fi
-
-echo "✓ Application built successfully"
-echo ""
-echo "✅ Deployment complete!"
-echo ""
-echo "📝 To run the application:"
-echo "   npm start              # Development mode on port 3000"
-echo "   npm run serve          # Production mode on port 3000"
-echo ""
-echo "Build output is in: ./build/"
-  --image-ids imageTag="$IMAGE_TAG" \
-  --region "$AWS_REGION" > /dev/null
-
-# Step 3: Check if task definition exists
-if aws ecs describe-task-definition \
-    --task-definition "$TASK_DEFINITION_NAME" \
-    --region "$AWS_REGION" > /dev/null 2>&1; then
-
-  echo "✅ Task exists → creating new revision"
-
-  TASK_JSON=$(aws ecs describe-task-definition \
-    --task-definition "$TASK_DEFINITION_NAME" \
-    --region "$AWS_REGION")
-
-  NEW_TASK_DEF=$(echo "$TASK_JSON" | python3 -c "
-import json,sys
-task=json.load(sys.stdin)['taskDefinition']
-for c in task['containerDefinitions']:
-    if c['name']=='$CONTAINER_NAME':
-        c['image']='$FULL_IMAGE_NAME'
-for k in ['taskDefinitionArn','revision','status','requiresAttributes','compatibilities','registeredAt','registeredBy']:
-    task.pop(k,None)
-print(json.dumps(task))
-")
-
-  TASK_ARN=$(aws ecs register-task-definition \
-    --cli-input-json "$NEW_TASK_DEF" \
-    --region "$AWS_REGION" \
-    --query 'taskDefinition.taskDefinitionArn' \
-    --output text)
-
-else
-  echo "⚠️ Task not found → creating new"
-
-  cat <<EOF > task-def.json
-{
-  "family": "${TASK_DEFINITION_NAME}",
-  "networkMode": "awsvpc",
-  "requiresCompatibilities": ["FARGATE"],
-  "cpu": "256",
-  "memory": "512",
-  "executionRoleArn": "${EXECUTION_ROLE_ARN}",
-  "containerDefinitions": [
-    {
-      "name": "${CONTAINER_NAME}",
-      "image": "${FULL_IMAGE_NAME}",
-      "essential": true,
-      "portMappings": [
-        {
-          "containerPort": 80,
-          "protocol": "tcp"
-        }
-      ]
-    }
-  ]
-}
-EOF
-
-  TASK_ARN=$(aws ecs register-task-definition \
-    --region "$AWS_REGION" \
-    --cli-input-json file://task-def.json \
-    --query 'taskDefinition.taskDefinitionArn' \
-    --output text)
-fi
-
-echo "📦 Task ARN: $TASK_ARN"
-
-# Step 4: Update service
-aws ecs update-service \
-  --cluster "$ECS_CLUSTER_NAME" \
-  --service "$ECS_SERVICE_NAME" \
-  --task-definition "$TASK_ARN" \
-  --region "$AWS_REGION" \
-  --force-new-deployment > /dev/null
-
-# Step 5: Wait for deployment
-aws ecs wait services-stable \
-  --cluster "$ECS_CLUSTER_NAME" \
-  --services "$ECS_SERVICE_NAME" \
-  --region "$AWS_REGION"
-
-echo "🎉 Deployment successful"
+    ;;
+esac
