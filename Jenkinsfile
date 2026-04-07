@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'hashicorp/terraform:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock --privileged'
+        }
+    }
 
     environment {
         AWS_REGION    = 'ap-south-1'
@@ -13,6 +18,14 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Install Node.js') {
+            steps {
+                sh '''
+                    apk add --no-cache nodejs npm
+                '''
             }
         }
 
@@ -41,6 +54,8 @@ pipeline {
                     string(credentialsId: 'aws-secrete-key-id', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
                     sh '''
+                        apk add --no-cache aws-cli
+
                         export AWS_REGION=${AWS_REGION}
                         export AWS_DEFAULT_REGION=${AWS_REGION}
 
@@ -78,6 +93,8 @@ pipeline {
                 ]) {
                     dir('terraform/files') {
                         sh '''
+                            apk add --no-cache aws-cli
+
                             IMAGE=$(grep '^IMAGE=' ../image-info.txt | cut -d'=' -f2-)
 
                             terraform apply -auto-approve \
