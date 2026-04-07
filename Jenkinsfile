@@ -14,10 +14,10 @@ pipeline {
 
         stage('Init') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials'
-                ]]) {
+                withCredentials([
+                    string(credentialsId: 'aws-acces-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secrete-key-id', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
                     script {
                         env.AWS_ACCOUNT_ID = sh(
                             script: "aws sts get-caller-identity --query Account --output text",
@@ -36,7 +36,6 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                // ✅ Fixed: added missing closing quote after .git
                 git url: 'https://github.com/omwarkri/kerala-tours.git', branch: 'main'
             }
         }
@@ -52,10 +51,10 @@ pipeline {
 
         stage('Push to ECR') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials'
-                ]]) {
+                withCredentials([
+                    string(credentialsId: 'aws-acces-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secrete-key-id', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
                     sh """
                         aws ecr get-login-password --region ${AWS_REGION} | \
                         docker login --username AWS --password-stdin ${env.ECR}
@@ -68,10 +67,10 @@ pipeline {
 
         stage('Deploy to ECS') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials'
-                ]]) {
+                withCredentials([
+                    string(credentialsId: 'aws-acces-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secrete-key-id', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
                     script {
                         def revision = sh(
                             script: """
@@ -82,11 +81,7 @@ pipeline {
                                 --cpu 256 \
                                 --memory 512 \
                                 --execution-role-arn arn:aws:iam::${env.AWS_ACCOUNT_ID}:role/ecsTaskExecutionRole \
-                                --container-definitions '[{
-                                  "name":"app",
-                                  "image":"${env.IMAGE}",
-                                  "portMappings":[{"containerPort":80}]
-                                }]' \
+                                --container-definitions '[{"name":"app","image":"${env.IMAGE}","portMappings":[{"containerPort":80}]}]' \
                                 --query 'taskDefinition.revision' \
                                 --output text
                             """,
