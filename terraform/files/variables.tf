@@ -25,7 +25,7 @@ variable "environment" {
 variable "ecr_image_url" {
   description = "ECR image URL for the Kerala Tours container"
   type        = string
-  default     = "782696281574.dkr.ecr.ap-south-1.amazonaws.com/kerala-toors:latest"
+  default     = "782696281574.dkr.ecr.ap-south-1.amazonaws.com/kerala-tours:latest"
 }
 
 variable "container_port" {

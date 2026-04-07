@@ -16,29 +16,15 @@ pipeline {
             }
         }
 
-        stage('Setup Tools') {
+        stage('Verify Tools') {
             steps {
                 sh '''
-                    # Install Node.js and npm
-                    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-                    apt-get install -y nodejs
-
-                    # Install AWS CLI
-                    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-                    unzip awscliv2.zip
-                    ./aws/install
-
-                    # Install Terraform
-                    wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-                    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com jammy main" | tee /etc/apt/sources.list.d/hashicorp.list
-                    apt-get update && apt-get install -y terraform
-
-                    # Verify installations
-                    node --version
-                    npm --version
-                    aws --version
-                    terraform --version
-                    docker --version
+                    echo "Verifying required tools..."
+                    node --version || echo "Node.js not found - please install Node.js 18+"
+                    npm --version || echo "npm not found - please install npm"
+                    docker --version || echo "Docker not found - please install Docker"
+                    aws --version || echo "AWS CLI not found - please install AWS CLI"
+                    terraform --version || echo "Terraform not found - please install Terraform"
                 '''
             }
         }
