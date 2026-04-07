@@ -2,99 +2,90 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION  = 'ap-south-1'
-        ECR_REPO    = 'kerala-tours'
-        IMAGE_TAG   = "${BUILD_NUMBER}"
-        CLUSTER     = 'kerala-cluster'
-        SERVICE     = 'kerala-service'
-        TASK_FAMILY = 'kerala-task'
+        AWS_REGION    = 'ap-south-1'
+        IMAGE_TAG     = "${BUILD_NUMBER}"
+        ECR_REPO      = 'kerala-tours'
+        DOMAIN_NAME   = 'kerala-tours.co.in'
+        WWW_DOMAIN    = 'www.kerala-tours.co.in'
     }
 
     stages {
-
-        stage('Init') {
-            steps {
-                withCredentials([
-                    string(credentialsId: 'aws-acces-key-id', variable: 'AWS_ACCESS_KEY_ID'),
-                    string(credentialsId: 'aws-secrete-key-id', variable: 'AWS_SECRET_ACCESS_KEY')
-                ]) {
-                    script {
-                        env.AWS_ACCOUNT_ID = sh(
-                            script: "aws sts get-caller-identity --query Account --output text",
-                            returnStdout: true
-                        ).trim()
-
-                        env.ECR   = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
-                        env.IMAGE = "${env.ECR}/${env.ECR_REPO}:${env.IMAGE_TAG}"
-
-                        echo "ECR: ${env.ECR}"
-                        echo "Image: ${env.IMAGE}"
-                    }
-                }
-            }
-        }
-
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/omwarkri/kerala-tours.git', branch: 'main'
+                checkout scm
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Install') {
             steps {
-                sh """
-                    docker build -t ${ECR_REPO}:${IMAGE_TAG} .
-                    docker tag ${ECR_REPO}:${IMAGE_TAG} ${env.IMAGE}
-                """
+                sh 'npm ci'
             }
         }
 
-        stage('Push to ECR') {
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh "docker build -t ${ECR_REPO}:${IMAGE_TAG} ."
+            }
+        }
+
+        stage('Publish to ECR') {
             steps {
                 withCredentials([
                     string(credentialsId: 'aws-acces-key-id', variable: 'AWS_ACCESS_KEY_ID'),
                     string(credentialsId: 'aws-secrete-key-id', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
-                    sh """
-                        aws ecr get-login-password --region ${AWS_REGION} | \
-                        docker login --username AWS --password-stdin ${env.ECR}
+                    sh '''
+                        export AWS_REGION=${AWS_REGION}
+                        export AWS_DEFAULT_REGION=${AWS_REGION}
 
-                        docker push ${env.IMAGE}
-                    """
+                        AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+                        ECR_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+                        IMAGE=${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}
+
+                        aws ecr describe-repositories --repository-names "${ECR_REPO}" >/dev/null 2>&1 || \
+                          aws ecr create-repository --repository-name "${ECR_REPO}"
+
+                        aws ecr get-login-password --region ${AWS_REGION} | \
+                          docker login --username AWS --password-stdin ${ECR_REGISTRY}
+
+                        docker tag ${ECR_REPO}:${IMAGE_TAG} ${IMAGE}
+                        docker push ${IMAGE}
+                        echo "IMAGE=${IMAGE}" > image-info.txt
+                    '''
                 }
             }
         }
 
-        stage('Deploy to ECS') {
+        stage('Terraform Init') {
+            steps {
+                dir('terraform/files') {
+                    sh 'terraform init -input=false'
+                }
+            }
+        }
+
+        stage('Terraform Deploy') {
             steps {
                 withCredentials([
                     string(credentialsId: 'aws-acces-key-id', variable: 'AWS_ACCESS_KEY_ID'),
                     string(credentialsId: 'aws-secrete-key-id', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
-                    script {
-                        def revision = sh(
-                            script: """
-                                aws ecs register-task-definition \
-                                --family ${TASK_FAMILY} \
-                                --network-mode awsvpc \
-                                --requires-compatibilities FARGATE \
-                                --cpu 256 \
-                                --memory 512 \
-                                --execution-role-arn arn:aws:iam::${env.AWS_ACCOUNT_ID}:role/ecsTaskExecutionRole \
-                                --container-definitions '[{"name":"app","image":"${env.IMAGE}","portMappings":[{"containerPort":80}]}]' \
-                                --query 'taskDefinition.revision' \
-                                --output text
-                            """,
-                            returnStdout: true
-                        ).trim()
+                    dir('terraform/files') {
+                        sh '''
+                            IMAGE=$(grep '^IMAGE=' ../image-info.txt | cut -d'=' -f2-)
 
-                        sh """
-                            aws ecs update-service \
-                            --cluster ${CLUSTER} \
-                            --service ${SERVICE} \
-                            --task-definition ${TASK_FAMILY}:${revision} \
-                            --force-new-deployment
-                        """
+                            terraform apply -auto-approve \
+                                -var="domain_name=${DOMAIN_NAME}" \
+                                -var="www_domain_name=${WWW_DOMAIN}" \
+                                -var="region=${AWS_REGION}" \
+                                -var="ecr_image_url=${IMAGE}"
+                        '''
                     }
                 }
             }

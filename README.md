@@ -54,25 +54,43 @@ If you want to use the local helper script:
 
 ## ☁️ AWS ECS Deployment
 
-This repository already includes AWS infrastructure files under `terraform/files` and a Jenkins pipeline for ECS deployment.
+This repository includes AWS infrastructure under `terraform/files` and a Jenkins pipeline that builds the Docker image, publishes it to Amazon ECR, and deploys ECS + ALB + Route 53 via Terraform.
 
-For AWS deployment, make sure you have:
-- AWS CLI configured with valid credentials
-- An ECR repository and ECS cluster/service in the same AWS region
-- The application container exposes port `80`
+The application is configured for the custom domain `kerala-tours.co.in` with `www.kerala-tours.co.in` as a secondary alias.
 
-The Jenkins pipeline builds the Docker image, pushes it to ECR, and updates the ECS service.
+Required setup:
+- AWS CLI credentials configured in Jenkins (`aws-acces-key-id` and `aws-secrete-key-id`)
+- Jenkins agent with Docker, Terraform, and AWS CLI installed
+- Route 53 delegated name servers configured at `kerala-tours.co.in` registrar if the hosted zone is created
+
+### Deploy with Terraform
+
+From the repo root:
+
+```bash
+cd terraform/files
+terraform init -input=false
+terraform apply -auto-approve \
+  -var='domain_name=kerala-tours.co.in' \
+  -var='www_domain_name=www.kerala-tours.co.in' \
+  -var='region=ap-south-1' \
+  -var='ecr_image_url=782696281574.dkr.ecr.ap-south-1.amazonaws.com/kerala-toors:latest'
+```
+
+The `monitoring.tf` file creates CloudWatch alarms for ECS CPU usage, ALB 5xx errors, and unhealthy targets.
 
 ## 🔧 Jenkins Pipeline
 
-The application includes a simple Jenkins pipeline for automated builds:
+The application includes a Jenkins pipeline for automated deployment to AWS using Terraform.
 
 ```
 Stages:
-1. Checkout     - Clone repository
-2. Install      - npm ci
-3. Build        - npm run build
-4. Docker Build - Build Docker image
+1. Checkout      - Clone repository
+2. Install       - npm ci
+3. Build         - npm run build
+4. Docker Build  - Build Docker image
+5. Publish to ECR - Push image to Amazon ECR
+6. Terraform Deploy - Apply infrastructure and ECS deployment
 ```
 
 ### Run Locally

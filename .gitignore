@@ -21,6 +21,7 @@ coverage/
 
 # Terraform — ignore state files but track config
 terraform/files/.terraform/
+*.tfstate
 *.tfstate.backup
 *.tfplan
 .terraform/
