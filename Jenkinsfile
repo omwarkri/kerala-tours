@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION   = 'ap-south-1'
-        ECR_REPO     = 'kerala-tours'
-        IMAGE_TAG    = "${BUILD_NUMBER}"
-        CLUSTER      = 'kerala-cluster'
-        SERVICE      = 'kerala-service'
-        TASK_FAMILY  = 'kerala-task'
+        AWS_REGION  = 'ap-south-1'
+        ECR_REPO    = 'kerala-tours'
+        IMAGE_TAG   = "${BUILD_NUMBER}"
+        CLUSTER     = 'kerala-cluster'
+        SERVICE     = 'kerala-service'
+        TASK_FAMILY = 'kerala-task'
     }
 
     stages {
@@ -24,7 +24,7 @@ pipeline {
                             returnStdout: true
                         ).trim()
 
-                        env.ECR = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
+                        env.ECR   = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
                         env.IMAGE = "${env.ECR}/${env.ECR_REPO}:${env.IMAGE_TAG}"
 
                         echo "ECR: ${env.ECR}"
@@ -36,7 +36,8 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/omwarkri/kerala-tours.git, branch: 'main'
+                // ✅ Fixed: added missing closing quote after .git
+                git url: 'https://github.com/omwarkri/kerala-tours.git', branch: 'main'
             }
         }
 
@@ -44,7 +45,7 @@ pipeline {
             steps {
                 sh """
                     docker build -t ${ECR_REPO}:${IMAGE_TAG} .
-                    docker tag ${ECR_REPO}:${IMAGE_TAG} ${IMAGE}
+                    docker tag ${ECR_REPO}:${IMAGE_TAG} ${env.IMAGE}
                 """
             }
         }
@@ -57,9 +58,9 @@ pipeline {
                 ]]) {
                     sh """
                         aws ecr get-login-password --region ${AWS_REGION} | \
-                        docker login --username AWS --password-stdin ${ECR}
+                        docker login --username AWS --password-stdin ${env.ECR}
 
-                        docker push ${IMAGE}
+                        docker push ${env.IMAGE}
                     """
                 }
             }
@@ -72,7 +73,6 @@ pipeline {
                     credentialsId: 'aws-credentials'
                 ]]) {
                     script {
-
                         def revision = sh(
                             script: """
                                 aws ecs register-task-definition \
@@ -81,10 +81,10 @@ pipeline {
                                 --requires-compatibilities FARGATE \
                                 --cpu 256 \
                                 --memory 512 \
-                                --execution-role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/ecsTaskExecutionRole \
+                                --execution-role-arn arn:aws:iam::${env.AWS_ACCOUNT_ID}:role/ecsTaskExecutionRole \
                                 --container-definitions '[{
                                   "name":"app",
-                                  "image":"${IMAGE}",
+                                  "image":"${env.IMAGE}",
                                   "portMappings":[{"containerPort":80}]
                                 }]' \
                                 --query 'taskDefinition.revision' \
