@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    options {
+        timeout(time: 1, unit: 'HOURS')
+        timestamps()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+
     environment {
         AWS_REGION    = 'ap-south-1'
         IMAGE_TAG     = "${BUILD_NUMBER}"
@@ -12,7 +18,20 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                retry(3) {
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        userRemoteConfigs: [[
+                            url: 'https://github.com/omwarkri/kerala-tours.git',
+                            credentialsId: 'github-cred'
+                        ]],
+                        extensions: [
+                            [$class: 'CloneOption', timeout: 300, noTags: false, reference: '', shallow: false],
+                            [$class: 'CheckoutOption', timeout: 300]
+                        ]
+                    ])
+                }
             }
         }
 
@@ -103,11 +122,27 @@ pipeline {
                 }
             }
         }
+
+        stage('Cleanup') {
+            steps {
+                sh '''
+                    echo "Cleaning up Docker resources..."
+                    docker system prune -f || true
+                    echo "Cleanup complete"
+                '''
+            }
+        }
     }
 
     post {
-        always {
-            sh 'docker system prune -f || true'
+        success {
+            echo '✅ Pipeline completed successfully!'
+        }
+        unstable {
+            echo '⚠️ Pipeline completed with warnings'
+        }
+        failure {
+            echo '❌ Pipeline failed'
         }
     }
 }
