@@ -36,7 +36,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/omwarkri/ShareTask-App.git', branch: 'main'
+                git url: 'https://github.com/omwarkri/kerala-tours.git, branch: 'main'
             }
         }
 
