@@ -60,19 +60,38 @@ The application is configured for the custom domain `kerala-tours.co.in` with `w
 
 ### Jenkins Agent Setup
 
-Before running the pipeline, your Jenkins agent must have these tools installed:
+Before running the pipeline, your Jenkins container or agent must have these tools installed.
+
+#### Option 1: Build a custom Jenkins Docker image
 
 ```bash
-# Run the automated setup script (requires sudo):
-./jenkins-setup.sh
+docker build -t jenkins-kerala -f jenkins.Dockerfile .
+```
 
-# Or install manually:
-# Node.js 18+, npm, Docker, AWS CLI v2, Terraform 1.5+
+Run Jenkins with persistent storage and host Docker socket access:
+
+```bash
+docker run -d \
+  --name jenkins \
+  -p 8080:8080 -p 50000:50000 \
+  -v jenkins_home:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  jenkins-kerala
+```
+
+This ensures:
+- Jenkins job history and configuration persist in `jenkins_home`
+- The Jenkins container can use the host Docker daemon for `docker build`/`docker push`
+
+#### Option 2: Install tools on the host or agent machine
+
+```bash
+./jenkins-setup.sh
 ```
 
 **Required tools:**
 - **Node.js 18+** and npm (for React app build)
-- **Docker** (for containerization)
+- **Docker CLI** and access to the Docker daemon
 - **AWS CLI v2** (for ECR and Terraform operations)
 - **Terraform 1.5+** (for infrastructure deployment)
 
