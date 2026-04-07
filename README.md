@@ -58,12 +58,25 @@ This repository includes AWS infrastructure under `terraform/files` and a Jenkin
 
 The application is configured for the custom domain `kerala-tours.co.in` with `www.kerala-tours.co.in` as a secondary alias.
 
+### Jenkins Agent Setup
+
+Before running the pipeline, your Jenkins agent must have these tools installed:
+
+```bash
+# Run the automated setup script (requires sudo):
+./jenkins-setup.sh
+
+# Or install manually:
+# Node.js 18+, npm, Docker, AWS CLI v2, Terraform 1.5+
+```
+
+**Required tools:**
+- **Node.js 18+** and npm (for React app build)
+- **Docker** (for containerization)
+- **AWS CLI v2** (for ECR and Terraform operations)
+- **Terraform 1.5+** (for infrastructure deployment)
+
 Required setup:
-- Jenkins agent with the following tools pre-installed:
-  - **Node.js 18+** and npm
-  - **Docker** (with daemon running)
-  - **AWS CLI v2**
-  - **Terraform 1.5+**
 - AWS CLI credentials configured in Jenkins (`aws-acces-key-id` and `aws-secrete-key-id`)
 - Route 53 delegated name servers configured at `kerala-tours.co.in` registrar if the hosted zone is created
 
