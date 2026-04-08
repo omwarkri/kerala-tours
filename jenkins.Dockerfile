@@ -3,7 +3,7 @@ FROM jenkins/jenkins:lts
 USER root
 
 RUN apt-get update && apt-get install -y \
-    curl unzip git ca-certificates gnupg lsb-release \
+    bash curl unzip git ca-certificates gnupg lsb-release \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 18+ and npm
@@ -26,7 +26,7 @@ RUN curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tm
     && /tmp/aws/install \
     && rm -rf /tmp/aws /tmp/awscliv2.zip
 
-RUN usermod -aG docker jenkins
+RUN groupadd -f docker && usermod -aG docker jenkins
 
 USER jenkins
 
