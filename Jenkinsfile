@@ -69,8 +69,8 @@ pipeline {
         stage('Publish to ECR') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'aws-acces-key-id', variable: 'AWS_ACCESS_KEY_ID'),
-                    string(credentialsId: 'aws-secrete-key-id', variable: 'AWS_SECRET_ACCESS_KEY')
+                    string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secret-key-id', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
                     sh '''
                         export AWS_REGION=${AWS_REGION}
@@ -105,8 +105,8 @@ pipeline {
         stage('Terraform Deploy') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'aws-acces-key-id', variable: 'AWS_ACCESS_KEY_ID'),
-                    string(credentialsId: 'aws-secrete-key-id', variable: 'AWS_SECRET_ACCESS_KEY')
+                    string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secret-key-id', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
                     dir('terraform/files') {
                         sh '''
