@@ -138,6 +138,8 @@ pipeline {
 
                             echo "🚀 Deploying image: ${IMAGE}"
 
+                            bash ./import-existing-resources.sh
+
                             terraform apply -auto-approve \
                                 -var="domain_name=${DOMAIN_NAME}" \
                                 -var="www_domain_name=${WWW_DOMAIN}" \
