@@ -1,4 +1,12 @@
 # ==============================
+# IMPORT EXISTING CODEDEPLOY ROLE
+# ==============================
+import {
+  to = aws_iam_role.codedeploy_role
+  id = "kerala-codedeploy-role"
+}
+
+# ==============================
 # CODEDEPLOY APP
 # ==============================
 resource "aws_codedeploy_app" "app" {
@@ -36,31 +44,27 @@ resource "aws_codedeploy_deployment_group" "dg" {
   service_role_arn       = aws_iam_role.codedeploy_role.arn
   deployment_config_name = "CodeDeployDefault.ECSAllAtOnce"
 
-  # ✅ REQUIRED FOR ECS
   blue_green_deployment_config {
     deployment_ready_option {
-      action_on_timeout = "CONTINUE_DEPLOYMENT"  # auto cutover, no manual approval
+      action_on_timeout = "CONTINUE_DEPLOYMENT"
     }
 
     terminate_blue_instances_on_deployment_success {
       action                           = "TERMINATE"
-      termination_wait_time_in_minutes = 5  # wait 5 min before killing old tasks
+      termination_wait_time_in_minutes = 5
     }
   }
 
-  # ✅ REQUIRED FOR ECS
   deployment_style {
     deployment_option = "WITH_TRAFFIC_CONTROL"
     deployment_type   = "BLUE_GREEN"
   }
 
-  # ✅ REQUIRED FOR ECS
   ecs_service {
     cluster_name = aws_ecs_cluster.main.name
     service_name = aws_ecs_service.service.name
   }
 
-  # ✅ BOTH LISTENERS + BOTH TARGET GROUPS
   load_balancer_info {
     target_group_pair_info {
       prod_traffic_route {

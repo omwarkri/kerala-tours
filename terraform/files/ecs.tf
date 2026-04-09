@@ -1,4 +1,18 @@
 # ==============================
+# IMPORT EXISTING RESOURCES
+# (Safe to keep permanently — Terraform ignores after first apply)
+# ==============================
+import {
+  to = aws_iam_role.ecs_task_execution
+  id = "kerala-ecs-task-execution-role-v2"
+}
+
+import {
+  to = aws_cloudwatch_log_group.ecs
+  id = "/ecs/kerala-tours-v2"
+}
+
+# ==============================
 # ECS CLUSTER
 # ==============================
 resource "aws_ecs_cluster" "main" {
@@ -42,8 +56,6 @@ resource "aws_cloudwatch_log_group" "ecs" {
 # ==============================
 # ECS TASK DEFINITION
 # ==============================
-
-# ✅ Validate the image URL is not empty before registering the task definition
 locals {
   ecr_image_url_validated = var.ecr_image_url != "" ? var.ecr_image_url : tobool(
     "ERROR: ecr_image_url variable is empty. Pass -var='ecr_image_url=<your-ecr-uri>' to terraform apply."
@@ -61,7 +73,7 @@ resource "aws_ecs_task_definition" "task" {
   container_definitions = jsonencode([
     {
       name  = "kerala-container"
-      image = local.ecr_image_url_validated  # ✅ Uses validated local, never empty
+      image = local.ecr_image_url_validated
 
       portMappings = [
         {
@@ -97,7 +109,6 @@ resource "aws_ecs_service" "service" {
   desired_count   = 1
   launch_type     = "FARGATE"
 
-  # ✅ Required for CodeDeploy blue/green — gives the new task time to start
   health_check_grace_period_seconds = 60
 
   deployment_controller {
@@ -116,8 +127,6 @@ resource "aws_ecs_service" "service" {
     container_port   = var.container_port
   }
 
-  # ✅ After first deploy, CodeDeploy owns task_definition and load_balancer
-  #    Do NOT remove this block or Terraform will fight CodeDeploy on every run
   lifecycle {
     ignore_changes = [task_definition, load_balancer]
   }
