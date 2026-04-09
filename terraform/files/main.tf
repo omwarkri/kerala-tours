@@ -25,21 +25,19 @@ resource "aws_acm_certificate" "cert" {
   }
 }
 
+locals {
+  validation_domains = [var.domain_name, var.www_domain_name]
+}
+
 # DNS Validation Records (shared by both certs — same domain)
 resource "aws_route53_record" "cert_validation" {
-  for_each = {
-    for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => {
-      name   = dvo.resource_record_name
-      type   = dvo.resource_record_type
-      record = dvo.resource_record_value
-    }
-  }
+  for_each = { for domain in local.validation_domains : domain => {} }
 
   zone_id = aws_route53_zone.main.zone_id
-  name    = each.value.name
-  type    = each.value.type
+  name    = [for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.resource_record_name if dvo.domain_name == each.key][0]
+  type    = [for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.resource_record_type if dvo.domain_name == each.key][0]
   ttl     = 300
-  records = [each.value.record]
+  records = [[for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.resource_record_value if dvo.domain_name == each.key][0]]
 }
 
 # Certificate Validation — us-east-1
