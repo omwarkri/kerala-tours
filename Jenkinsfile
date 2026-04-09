@@ -44,6 +44,8 @@ pipeline {
                     docker --version || echo "Docker not found - please install Docker"
                     aws --version || echo "AWS CLI not found - please install AWS CLI"
                     terraform --version || echo "Terraform not found - please install Terraform"
+                    kubectl version --client --short || echo "kubectl not found - please install kubectl"
+                    eksctl version || echo "eksctl not found - please install eksctl"
                 '''
             }
         }
