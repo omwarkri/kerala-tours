@@ -78,11 +78,23 @@ ROUTE_TABLE_ID=$(aws ec2 describe-route-tables --filters "Name=tag:Name,Values=k
 import_resource aws_route_table.public "$ROUTE_TABLE_ID"
 
 if [ -n "$ROUTE_TABLE_ID" ] && [ -n "$SUBNET1_ID" ]; then
-  import_resource aws_route_table_association.subnet1 "${SUBNET1_ID}/${ROUTE_TABLE_ID}"
+  # Check if subnet1 is associated with the route table
+  ASSOC_EXISTS=$(aws ec2 describe-route-tables --route-table-ids "$ROUTE_TABLE_ID" --query "RouteTables[0].Associations[?SubnetId=='$SUBNET1_ID'].RouteTableAssociationId" --output text 2>/dev/null || true)
+  if [ -n "$ASSOC_EXISTS" ]; then
+    import_resource aws_route_table_association.subnet1 "${SUBNET1_ID}/${ROUTE_TABLE_ID}"
+  else
+    echo "⚠️  Skipping import aws_route_table_association.subnet1: no association found"
+  fi
 fi
 
 if [ -n "$ROUTE_TABLE_ID" ] && [ -n "$SUBNET2_ID" ]; then
-  import_resource aws_route_table_association.subnet2 "${SUBNET2_ID}/${ROUTE_TABLE_ID}"
+  # Check if subnet2 is associated with the route table
+  ASSOC_EXISTS=$(aws ec2 describe-route-tables --route-table-ids "$ROUTE_TABLE_ID" --query "RouteTables[0].Associations[?SubnetId=='$SUBNET2_ID'].RouteTableAssociationId" --output text 2>/dev/null || true)
+  if [ -n "$ASSOC_EXISTS" ]; then
+    import_resource aws_route_table_association.subnet2 "${SUBNET2_ID}/${ROUTE_TABLE_ID}"
+  else
+    echo "⚠️  Skipping import aws_route_table_association.subnet2: no association found"
+  fi
 fi
 
 SG_ALB_ID=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=kerala-alb-sg" --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null || true)
