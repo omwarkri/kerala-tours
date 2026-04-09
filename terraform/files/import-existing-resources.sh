@@ -78,13 +78,11 @@ ROUTE_TABLE_ID=$(aws ec2 describe-route-tables --filters "Name=tag:Name,Values=k
 import_resource aws_route_table.public "$ROUTE_TABLE_ID"
 
 if [ -n "$ROUTE_TABLE_ID" ] && [ -n "$SUBNET1_ID" ]; then
-  ASSOC1_ID=$(aws ec2 describe-route-tables --filters "Name=route-table-id,Values=${ROUTE_TABLE_ID}" "Name=association.subnet-id,Values=${SUBNET1_ID}" --query 'RouteTables[0].Associations[0].RouteTableAssociationId' --output text 2>/dev/null || true)
-  import_resource aws_route_table_association.subnet1 "$ASSOC1_ID"
+  import_resource aws_route_table_association.subnet1 "${SUBNET1_ID}/${ROUTE_TABLE_ID}"
 fi
 
 if [ -n "$ROUTE_TABLE_ID" ] && [ -n "$SUBNET2_ID" ]; then
-  ASSOC2_ID=$(aws ec2 describe-route-tables --filters "Name=route-table-id,Values=${ROUTE_TABLE_ID}" "Name=association.subnet-id,Values=${SUBNET2_ID}" --query 'RouteTables[0].Associations[0].RouteTableAssociationId' --output text 2>/dev/null || true)
-  import_resource aws_route_table_association.subnet2 "$ASSOC2_ID"
+  import_resource aws_route_table_association.subnet2 "${SUBNET2_ID}/${ROUTE_TABLE_ID}"
 fi
 
 SG_ALB_ID=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=kerala-alb-sg" --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null || true)
