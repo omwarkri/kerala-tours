@@ -42,6 +42,14 @@ resource "aws_cloudwatch_log_group" "ecs" {
 # ==============================
 # ECS TASK DEFINITION
 # ==============================
+
+# ✅ Validate the image URL is not empty before registering the task definition
+locals {
+  ecr_image_url_validated = var.ecr_image_url != "" ? var.ecr_image_url : tobool(
+    "ERROR: ecr_image_url variable is empty. Pass -var='ecr_image_url=<your-ecr-uri>' to terraform apply."
+  )
+}
+
 resource "aws_ecs_task_definition" "task" {
   family                   = "kerala-task"
   requires_compatibilities = ["FARGATE"]
@@ -53,7 +61,7 @@ resource "aws_ecs_task_definition" "task" {
   container_definitions = jsonencode([
     {
       name  = "kerala-container"
-      image = var.ecr_image_url
+      image = local.ecr_image_url_validated  # ✅ Uses validated local, never empty
 
       portMappings = [
         {
@@ -65,13 +73,18 @@ resource "aws_ecs_task_definition" "task" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.ecs.name
-          awslogs-region        = var.region
-          awslogs-stream-prefix = "ecs"
+          "awslogs-group"         = aws_cloudwatch_log_group.ecs.name
+          "awslogs-region"        = var.region
+          "awslogs-stream-prefix" = "ecs"
         }
       }
     }
   ])
+
+  tags = {
+    Name        = "kerala-task"
+    Environment = var.environment
+  }
 }
 
 # ==============================
@@ -80,9 +93,12 @@ resource "aws_ecs_task_definition" "task" {
 resource "aws_ecs_service" "service" {
   name            = "kerala-tours-service-v2"
   cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.task.arn  # ✅ THIS WAS MISSING
+  task_definition = aws_ecs_task_definition.task.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+
+  # ✅ Required for CodeDeploy blue/green — gives the new task time to start
+  health_check_grace_period_seconds = 60
 
   deployment_controller {
     type = "CODE_DEPLOY"
@@ -100,7 +116,8 @@ resource "aws_ecs_service" "service" {
     container_port   = var.container_port
   }
 
-  # ✅ Ignore changes CodeDeploy manages after first deploy
+  # ✅ After first deploy, CodeDeploy owns task_definition and load_balancer
+  #    Do NOT remove this block or Terraform will fight CodeDeploy on every run
   lifecycle {
     ignore_changes = [task_definition, load_balancer]
   }
