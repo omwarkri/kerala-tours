@@ -63,11 +63,13 @@ fi
 VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Name,Values=kerala-tours-vpc" --query 'Vpcs[0].VpcId' --output text 2>/dev/null || true)
 import_resource aws_vpc.main "$VPC_ID"
 
-SUBNET1_ID=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=kerala-tours-subnet-1" --query 'Subnets[0].SubnetId' --output text 2>/dev/null || true)
-import_resource aws_subnet.subnet1 "$SUBNET1_ID"
+# Skip subnet imports - now using data sources instead of managed resources
+echo "ℹ️  Skipping subnet imports: using data sources instead of managed resources"
+# SUBNET1_ID=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=kerala-tours-subnet-1" --query 'Subnets[0].SubnetId' --output text 2>/dev/null || true)
+# import_resource aws_subnet.subnet1 "$SUBNET1_ID"
 
-SUBNET2_ID=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=kerala-tours-subnet-2" --query 'Subnets[0].SubnetId' --output text 2>/dev/null || true)
-import_resource aws_subnet.subnet2 "$SUBNET2_ID"
+# SUBNET2_ID=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=kerala-tours-subnet-2" --query 'Subnets[0].SubnetId' --output text 2>/dev/null || true)
+# import_resource aws_subnet.subnet2 "$SUBNET2_ID"
 
 if [ -n "$VPC_ID" ]; then
   IGW_ID=$(aws ec2 describe-internet-gateways --filters "Name=attachment.vpc-id,Values=${VPC_ID}" --query 'InternetGateways[0].InternetGatewayId' --output text 2>/dev/null || true)
@@ -77,25 +79,27 @@ fi
 ROUTE_TABLE_ID=$(aws ec2 describe-route-tables --filters "Name=tag:Name,Values=kerala-tours-rt" --query 'RouteTables[0].RouteTableId' --output text 2>/dev/null || true)
 import_resource aws_route_table.public "$ROUTE_TABLE_ID"
 
-if [ -n "$ROUTE_TABLE_ID" ] && [ -n "$SUBNET1_ID" ]; then
-  # Check if subnet1 is associated with the route table
-  ASSOC_EXISTS=$(aws ec2 describe-route-tables --route-table-ids "$ROUTE_TABLE_ID" --query "RouteTables[0].Associations[?SubnetId=='$SUBNET1_ID'].RouteTableAssociationId" --output text 2>/dev/null || true)
-  if [ -n "$ASSOC_EXISTS" ]; then
-    import_resource aws_route_table_association.subnet1 "${SUBNET1_ID}/${ROUTE_TABLE_ID}"
-  else
-    echo "⚠️  Skipping import aws_route_table_association.subnet1: no association found"
-  fi
-fi
+# Skip route table association imports - these are managed externally
+echo "ℹ️  Skipping route table association imports: managed externally"
+# if [ -n "$ROUTE_TABLE_ID" ] && [ -n "$SUBNET1_ID" ]; then
+#   # Check if subnet1 is associated with the route table
+#   ASSOC_EXISTS=$(aws ec2 describe-route-tables --route-table-ids "$ROUTE_TABLE_ID" --query "RouteTables[0].Associations[?SubnetId=='$SUBNET1_ID'].RouteTableAssociationId" --output text 2>/dev/null || true)
+#   if [ -n "$ASSOC_EXISTS" ]; then
+#     import_resource aws_route_table_association.subnet1 "${SUBNET1_ID}/${ROUTE_TABLE_ID}"
+#   else
+#     echo "⚠️  Skipping import aws_route_table_association.subnet1: no association found"
+#   fi
+# fi
 
-if [ -n "$ROUTE_TABLE_ID" ] && [ -n "$SUBNET2_ID" ]; then
-  # Check if subnet2 is associated with the route table
-  ASSOC_EXISTS=$(aws ec2 describe-route-tables --route-table-ids "$ROUTE_TABLE_ID" --query "RouteTables[0].Associations[?SubnetId=='$SUBNET2_ID'].RouteTableAssociationId" --output text 2>/dev/null || true)
-  if [ -n "$ASSOC_EXISTS" ]; then
-    import_resource aws_route_table_association.subnet2 "${SUBNET2_ID}/${ROUTE_TABLE_ID}"
-  else
-    echo "⚠️  Skipping import aws_route_table_association.subnet2: no association found"
-  fi
-fi
+# if [ -n "$ROUTE_TABLE_ID" ] && [ -n "$SUBNET2_ID" ]; then
+#   # Check if subnet2 is associated with the route table
+#   ASSOC_EXISTS=$(aws ec2 describe-route-tables --route-table-ids "$ROUTE_TABLE_ID" --query "RouteTables[0].Associations[?SubnetId=='$SUBNET2_ID'].RouteTableAssociationId" --output text 2>/dev/null || true)
+#   if [ -n "$ASSOC_EXISTS" ]; then
+#     import_resource aws_route_table_association.subnet2 "${SUBNET2_ID}/${ROUTE_TABLE_ID}"
+#   else
+#     echo "⚠️  Skipping import aws_route_table_association.subnet2: no association found"
+#   fi
+# fi
 
 SG_ALB_ID=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=kerala-alb-sg" --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null || true)
 import_resource aws_security_group.alb_sg "$SG_ALB_ID"
