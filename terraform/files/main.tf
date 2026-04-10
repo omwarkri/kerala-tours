@@ -33,11 +33,16 @@ locals {
 resource "aws_route53_record" "cert_validation" {
   for_each = { for domain in local.validation_domains : domain => {} }
 
-  zone_id = aws_route53_zone.main.zone_id
-  name    = [for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.resource_record_name if dvo.domain_name == each.key][0]
-  type    = [for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.resource_record_type if dvo.domain_name == each.key][0]
-  ttl     = 300
-  records = [[for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.resource_record_value if dvo.domain_name == each.key][0]]
+  zone_id         = aws_route53_zone.main.zone_id
+  name            = [for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.resource_record_name if dvo.domain_name == each.key][0]
+  type            = [for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.resource_record_type if dvo.domain_name == each.key][0]
+  ttl             = 300
+  records         = [[for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.resource_record_value if dvo.domain_name == each.key][0]]
+  allow_overwrite = true
+
+  lifecycle {
+    ignore_changes = [records, ttl]
+  }
 }
 
 # Certificate Validation — us-east-1
@@ -56,7 +61,8 @@ resource "aws_acm_certificate" "cert_alb" {
   validation_method         = "DNS"
 
   lifecycle {
-    create_before_destroy = true
+    create_before_destroy = false
+    ignore_changes        = [tags]
   }
 
   tags = {

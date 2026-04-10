@@ -18,28 +18,35 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_subnet" "subnet1" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.1.0/24"
-  availability_zone       = "${var.region}a"
-  map_public_ip_on_launch = true
+# Reference existing subnets via data source
+data "aws_subnet" "subnet1" {
+  filter {
+    name   = "cidr-block"
+    values = ["10.0.1.0/24"]
+  }
 
-  tags = {
-    Name        = "kerala-tours-subnet-1"
-    Environment = var.environment
+  filter {
+    name   = "vpc-id"
+    values = [aws_vpc.main.id]
   }
 }
 
-resource "aws_subnet" "subnet2" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.2.0/24"
-  availability_zone       = "${var.region}b"
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name        = "kerala-tours-subnet-2"
-    Environment = var.environment
+data "aws_subnet" "subnet2" {
+  filter {
+    name   = "cidr-block"
+    values = ["10.0.2.0/24"]
   }
+
+  filter {
+    name   = "vpc-id"
+    values = [aws_vpc.main.id]
+  }
+}
+
+# Local references for backward compatibility (these act as proxies to the data sources)
+locals {
+  subnet1_id = data.aws_subnet.subnet1.id
+  subnet2_id = data.aws_subnet.subnet2.id
 }
 
 resource "aws_route_table" "public" {
@@ -56,15 +63,17 @@ resource "aws_route_table" "public" {
   }
 }
 
-resource "aws_route_table_association" "subnet1" {
-  subnet_id      = aws_subnet.subnet1.id
-  route_table_id = aws_route_table.public.id
-}
-
-resource "aws_route_table_association" "subnet2" {
-  subnet_id      = aws_subnet.subnet2.id
-  route_table_id = aws_route_table.public.id
-}
+# Note: Route table associations are already managed in AWS and not created by Terraform
+# These resources reference the existing associations without recreating them
+# resource "aws_route_table_association" "subnet1" {
+#   subnet_id      = local.subnet1_id
+#   route_table_id = aws_route_table.public.id
+# }
+#
+# resource "aws_route_table_association" "subnet2" {
+#   subnet_id      = local.subnet2_id
+#   route_table_id = aws_route_table.public.id
+# }
 
 # Security Group for ALB
 resource "aws_security_group" "alb_sg" {

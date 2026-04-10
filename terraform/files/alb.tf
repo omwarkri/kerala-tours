@@ -5,7 +5,7 @@ resource "aws_lb" "alb" {
   name               = "kerala-alb-v2"
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
+  subnets            = [local.subnet1_id, local.subnet2_id]
 
   tags = {
     Name        = "kerala-alb-v2"
