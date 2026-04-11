@@ -24,13 +24,13 @@ resource "aws_lb_target_group" "blue" {
   target_type = "ip"
 
   health_check {
-    path                = "/"
+    path                = "/health"
     protocol            = "HTTP"
     matcher             = "200"
-    interval            = 30
+    interval            = 10
     timeout             = 5
     healthy_threshold   = 2
-    unhealthy_threshold = 2
+    unhealthy_threshold = 3
   }
 
   tags = {
@@ -50,13 +50,13 @@ resource "aws_lb_target_group" "green" {
   target_type = "ip"
 
   health_check {
-    path                = "/"
+    path                = "/health"
     protocol            = "HTTP"
     matcher             = "200"
-    interval            = 30
+    interval            = 10
     timeout             = 5
     healthy_threshold   = 2
-    unhealthy_threshold = 2
+    unhealthy_threshold = 3
   }
 
   tags = {

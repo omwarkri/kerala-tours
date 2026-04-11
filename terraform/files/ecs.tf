@@ -57,9 +57,7 @@ resource "aws_cloudwatch_log_group" "ecs" {
 # ECS TASK DEFINITION
 # ==============================
 locals {
-  ecr_image_url_validated = var.ecr_image_url != "" ? var.ecr_image_url : tobool(
-    "ERROR: ecr_image_url variable is empty. Pass -var='ecr_image_url=<your-ecr-uri>' to terraform apply."
-  )
+  ecr_image_url_validated = var.ecr_image_url != "" ? var.ecr_image_url : "782696281574.dkr.ecr.ap-south-1.amazonaws.com/kerala-tours:latest-fresh"
 }
 
 resource "aws_ecs_task_definition" "task" {
@@ -81,6 +79,14 @@ resource "aws_ecs_task_definition" "task" {
           protocol      = "tcp"
         }
       ]
+
+      healthCheck = {
+        command     = ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:${var.container_port}/health || exit 1"]
+        interval    = 10
+        timeout     = 5
+        retries     = 3
+        startPeriod = 60
+      }
 
       logConfiguration = {
         logDriver = "awslogs"

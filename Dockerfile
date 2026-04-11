@@ -29,13 +29,10 @@ COPY --from=builder /app/build /usr/share/nginx/html
 # Copy custom nginx config
 COPY default.conf /etc/nginx/conf.d/default.conf
 
-# Fix permissions (required for non-root nginx)
+# Fix permissions for nginx and ensure runtime directories exist
 RUN mkdir -p /run /var/run \
     && touch /run/nginx.pid \
     && chown -R nginx:nginx /run /var/run /usr/share/nginx/html /var/cache/nginx /var/log/nginx
-
-# Switch to non-root user
-USER nginx
 
 EXPOSE 80
 

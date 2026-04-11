@@ -1,0 +1,9 @@
+{
+    "ServiceName": "kerala-tours-service-v2",
+    "Status": "ACTIVE",
+    "DesiredCount": 1,
+    "RunningCount": 0,
+    "PendingCount": 0,
+    "TaskDefinition": "arn:aws:ecs:ap-south-1:782696281574:task-definition/kerala-task:13",
+    "Deployments": null
+}
