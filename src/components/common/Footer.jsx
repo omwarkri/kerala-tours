@@ -220,8 +220,8 @@ const Footer = () => {
               {/* Email */}
               <div className="flex items-start space-x-2">
                 <span className="w-4 h-4 text-emerald-400 mt-0.5">✉️</span>
-                <a href="mailto:omkartours143@gmail.com" className="hover:text-emerald-400 text-white font-medium">
-                  omkartours143@gmail.com
+                <a href="mailto:owarkri710@gmail.com" className="hover:text-emerald-400 text-white font-medium">
+                  owarkri710@gmail.com
                 </a>
               </div>
             </div>

@@ -69,13 +69,13 @@ const ContactPage = () => {
               <div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">Email</h3>
                 <p className="text-gray-700 mb-1">
-                  <a href="mailto:omkartours143@gmail.com" className="hover:text-emerald-600 transition duration-200 font-semibold text-base break-all">
-                    omkartours143@gmail.com
+                  <a href="mailto:owarkri710@gmail.com" className="hover:text-emerald-600 transition duration-200 font-semibold text-base break-all">
+                    owarkri710@gmail.com
                   </a>
                 </p>
                 <p className="text-gray-700">
-                  <a href="mailto:omkartours143@gmail.com" className="hover:text-emerald-600 transition duration-200 font-semibold text-base break-all">
-                    omkartours143@gmail.com
+                  <a href="mailto:owarkri710@gmail.com" className="hover:text-emerald-600 transition duration-200 font-semibold text-base break-all">
+                    owarkri710@gmail.com
                   </a>
                 </p>
                 <p className="text-sm text-gray-600 mt-2 font-medium">For detailed inquiries</p>

@@ -107,8 +107,8 @@ const ContactPage = () => {
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 mb-2">Email</h3>
-                <a href="mailto:omkartours143@gmail.com" className="block text-gray-700 hover:text-purple-600 transition-colors text-sm">
-                  omkartours143@gmail.com
+                <a href="mailto:owarkri710@gmail.com" className="block text-gray-700 hover:text-purple-600 transition-colors text-sm">
+                  owarkri710@gmail.com
                 </a>
               </div>
             </div>
