@@ -78,6 +78,7 @@ pipeline {
                         AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
                         ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
                         IMAGE="${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
+                        LATEST_IMAGE="${ECR_REGISTRY}/${ECR_REPO}:latest"
 
                         # Create ECR repo if it doesn't exist
                         aws ecr describe-repositories --repository-names "${ECR_REPO}" \
@@ -90,11 +91,14 @@ pipeline {
                             docker login --username AWS --password-stdin "${ECR_REGISTRY}"
 
                         docker tag "${ECR_REPO}:${IMAGE_TAG}" "${IMAGE}"
+                        docker tag "${ECR_REPO}:${IMAGE_TAG}" "${LATEST_IMAGE}"
                         docker push "${IMAGE}"
+                        docker push "${LATEST_IMAGE}"
 
                         # ✅ Write to workspace root using absolute path
                         echo "IMAGE=${IMAGE}" > "${WORKSPACE}/image-info.txt"
                         echo "✅ Image pushed: ${IMAGE}"
+                        echo "✅ Latest updated: ${LATEST_IMAGE}"
                         cat "${WORKSPACE}/image-info.txt"
                     '''
                 }
